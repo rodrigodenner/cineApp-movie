@@ -1,0 +1,65 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - laravel
+
+    nginx:
+        image: nginx:alpine
+        ports:
+            - "8989:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - laravel
+
+    db:
+        platform: linux/amd64
+        image: mysql:5.7.22
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE:-teste_lwsa}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_USER: ${DB_USERNAME:-root}
+        volumes:
+            - ./docker/mysql/dbdata:/var/lib/mysql
+        ports:
+            - "3388:3306"
+        networks:
+            - laravel
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+        networks:
+            - laravel
+
+    frontend:
+        build:
+            context: ../front-end
+            dockerfile: Dockerfile
+        volumes:
+            - ../front-end:/app
+            - frontend_node_modules:/app/node_modules
+        ports:
+            - "5173:5173"
+        networks:
+            - laravel
+
+networks:
+    laravel:
+        driver: bridge
+
+volumes:
+    frontend_node_modules:
