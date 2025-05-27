@@ -1,0 +1,467 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Filmes",
+        "description": "Documentação da API de filmes com integração à TMDB",
+        "contact": {
+            "name": "Rodrigo Denner",
+            "email": "rodrigodennerdev@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/movies/search": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Buscar filmes por nome",
+                "operationId": "95e822a5784d90178255ea40c4b4fc3b",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de filmes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TMDBMovie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/{id}": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Detalhes de um filme",
+                "operationId": "0665e4e5eeb4738291d9733b6015218b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TMDBMovie"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/popular": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Listar filmes populares",
+                "operationId": "f80b9fb4f87241954d3206e057760091",
+                "responses": {
+                    "200": {
+                        "description": "Lista de filmes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TMDBMovie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/now-playing": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Listar filmes em cartaz",
+                "operationId": "2959c75c43fae13535ed8d5590910a4c",
+                "responses": {
+                    "200": {
+                        "description": "Filmes em cartaz",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TMDBMovie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/trending": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Filmes em alta",
+                "operationId": "47f8fe3e03e39ed6dfdcf5cc4cc3ea29",
+                "responses": {
+                    "200": {
+                        "description": "Filmes em alta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TMDBMovie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/genres": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Listar todos os gêneros",
+                "operationId": "1f312ccf7ca94416b1516f11f509d759",
+                "responses": {
+                    "200": {
+                        "description": "Lista de gêneros",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/genre/{genreId}": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Filmes por gênero",
+                "operationId": "ec5ff6de65ade2b8466e56880bdadf74",
+                "parameters": [
+                    {
+                        "name": "genreId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de filmes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TMDBMovie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/favorite": {
+            "post": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Favoritar um filme",
+                "operationId": "df27aec9203249de3ec930b244dc6c09",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tmdb_id"
+                                ],
+                                "properties": {
+                                    "tmdb_id": {
+                                        "type": "integer",
+                                        "example": 550
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Filme favoritado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieFavorite"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/favorites": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Listar filmes favoritos",
+                "operationId": "cbcb352efd26d5f02ef10b643c1633e1",
+                "responses": {
+                    "200": {
+                        "description": "Favoritos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MovieFavorite"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/movies/favorites/{tmdbId}": {
+            "delete": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Remover dos favoritos",
+                "operationId": "e437062c4fe81a5eec7f49137558cff9",
+                "parameters": [
+                    {
+                        "name": "tmdbId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Removido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Removido dos favoritos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TMDBMovie": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 550
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Fight Club"
+                    },
+                    "poster_path": {
+                        "type": "string",
+                        "example": "/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            18,
+                            28
+                        ]
+                    },
+                    "overview": {
+                        "type": "string",
+                        "example": "Um homem insatisfeito com sua vida conhece Tyler..."
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1999-10-15"
+                    },
+                    "vote_average": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 8.4
+                    }
+                },
+                "type": "object"
+            },
+            "MovieFavorite": {
+                "properties": {
+                    "tmdb_id": {
+                        "type": "integer",
+                        "example": 550
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Fight Club"
+                    },
+                    "poster_path": {
+                        "type": "string",
+                        "example": "/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"
+                    },
+                    "genre_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            18,
+                            28
+                        ]
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1999-10-15"
+                    },
+                    "overview": {
+                        "type": "string",
+                        "example": "Um homem insatisfeito com sua vida conhece Tyler..."
+                    },
+                    "vote_average": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 8.4
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Movies",
+            "description": "Movies"
+        }
+    ]
+}
