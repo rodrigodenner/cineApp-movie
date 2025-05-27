@@ -15,7 +15,7 @@ class TMDBClient
         $this->token = config('movie-tmdb.tmdb.api_token');
 
         $this->client = new Client([
-            'base_uri' => config('movie-tmdb.tmdb.api_url'),
+            'base_uri' => rtrim(config('movie-tmdb.tmdb.api_url'), '/') . '/',
             'timeout'  => 5.0,
             'headers'  => [
                 'Authorization' => 'Bearer ' . $this->token,
