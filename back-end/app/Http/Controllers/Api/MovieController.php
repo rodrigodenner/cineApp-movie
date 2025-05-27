@@ -51,7 +51,7 @@ class MovieController extends Controller
      *     tags={"Movies"},
      *     summary="Buscar filmes por nome",
      *     security={{"Bearer":{}}},
-     *     @OA\Parameter(name="query", in="query", required=true, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="query", in="query", required=true, description="Texto para busca no título do filme", @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Lista de filmes", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")))
      * )
      */
@@ -175,6 +175,13 @@ class MovieController extends Controller
      *     tags={"Movies"},
      *     summary="Listar filmes favoritos",
      *     security={{"Bearer":{}}},
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         required=false,
+     *         description="Busca flexível por título, sinopse, nota, gênero ou data",
+     *         @OA\Schema(type="string")
+     *     ),
      *     @OA\Response(response=200, description="Favoritos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/MovieFavorite")))
      * )
      */

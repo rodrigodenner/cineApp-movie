@@ -21,6 +21,7 @@
                     {
                         "name": "query",
                         "in": "query",
+                        "description": "Texto para busca no título do filme",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -300,6 +301,17 @@
                 ],
                 "summary": "Listar filmes favoritos",
                 "operationId": "cbcb352efd26d5f02ef10b643c1633e1",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Busca flexível por título, sinopse, nota, gênero ou data",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Favoritos",
