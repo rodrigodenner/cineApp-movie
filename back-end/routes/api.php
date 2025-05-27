@@ -23,8 +23,9 @@ Route::middleware('auth:api')->prefix('movies')->group(function () {
     Route::get('trending', [MovieController::class, 'trending']);
     Route::get('genres', [MovieController::class, 'genres']);
     Route::get('genre/{genreId}', [MovieController::class, 'byGenre']);
-    Route::get('{id}', [MovieController::class, 'show']);
     Route::post('favorite', [MovieController::class, 'favorite']);
     Route::get('favorites', [MovieController::class, 'getFavorites']);
     Route::delete('favorites/{tmdbId}', [MovieController::class, 'unfavorite']);
+    Route::get('{id}', [MovieController::class, 'show']);
 });
+

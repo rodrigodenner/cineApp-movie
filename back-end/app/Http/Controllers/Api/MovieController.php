@@ -185,9 +185,10 @@ class MovieController extends Controller
      *     @OA\Response(response=200, description="Favoritos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/MovieFavorite")))
      * )
      */
-    public function getFavorites(ListUserFavoritesService $service)
+    public function getFavorites(Request $request, ListUserFavoritesService $service)
     {
-        $movies = $service->execute();
+        $search = $request->get('search');
+        $movies = $service->execute($search);
         return MovieResource::collection($movies);
     }
 
