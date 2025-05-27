@@ -18,7 +18,12 @@ return new class extends Migration
             $table->string('title');
             $table->string('poster_path')->nullable();
             $table->json('genre_ids')->nullable();
+            $table->date('release_date')->nullable();
+            $table->text('overview')->nullable();
+            $table->decimal('vote_average', 3, 1)->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'tmdb_id']);
         });
     }
 
