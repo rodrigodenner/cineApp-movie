@@ -8,9 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class ListUserFavoritesService
 {
-    public function execute(): Collection
+    public function execute(?string $search = null): Collection
     {
-        return MovieFavorite::where('user_id', Auth::id())->get();
+        return MovieFavorite::query()
+            ->where('user_id', Auth::id())
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%$search%")
+                        ->orWhere('overview', 'like', "%$search%")
+                        ->orWhereJsonContains('genre_ids', (int) $search)
+                        ->orWhereDate('release_date', $search)
+                        ->orWhere('vote_average', $search);
+                });
+            })
+            ->get();
     }
+
 }
 
