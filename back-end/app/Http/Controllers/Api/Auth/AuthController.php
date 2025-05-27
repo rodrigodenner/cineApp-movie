@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -37,7 +38,7 @@ class AuthController extends Controller
         $token = Auth::login($user);
 
         return response()->json([
-            'user'  => $user,
+            'user'  => new UserResource($user),
             'token' => $token
         ], 201);
     }
@@ -61,15 +62,19 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (!Auth::attempt($request->validated())) {
+        $credentials = $request->validated();
+
+        $token = Auth::attempt($credentials);
+
+        if (!$token) {
             throw ValidationException::withMessages([
                 'email' => ['As credenciais fornecidas estão incorretas.'],
             ]);
         }
 
         return response()->json([
-            'user'  => Auth::user(),
-            'token' => Auth::token()
+            'user'  => new UserResource(Auth::user()),
+            'token' => $token
         ]);
     }
 
@@ -94,7 +99,7 @@ class AuthController extends Controller
 
         $user->update($request->validated());
 
-        return response()->json($user);
+        return response()->json(new UserResource($user));
     }
 
     /**
