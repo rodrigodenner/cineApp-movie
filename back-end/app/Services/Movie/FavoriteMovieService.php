@@ -2,8 +2,9 @@
 
 namespace App\Services\Movie;
 
-use App\Models\MovieFavorite;
+use App\DTO\MovieDTO;
 use App\Http\Clients\TMDBClient;
+use App\Models\MovieFavorite;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteMovieService
@@ -23,19 +24,11 @@ class FavoriteMovieService
         }
 
         $movie = $this->client->get("movie/{$tmdbId}");
+        $dto = MovieDTO::fromTMDB($movie);
 
         return MovieFavorite::create([
-            'user_id'      => $userId,
-            'tmdb_id'      => $movie['id'],
-            'title'        => $movie['title'],
-            'poster_path'  => $movie['poster_path'] ?? null,
-            'genre_ids'    => collect($movie['genres'])->pluck('id')->toArray(),
-            'release_date' => $movie['release_date'] ?? null,
-            'overview'     => $movie['overview'] ?? null,
-            'vote_average' => $movie['vote_average'] ?? null,
+            'user_id' => $userId,
+            ...$dto->toArray(),
         ]);
     }
 }
-
-
-
