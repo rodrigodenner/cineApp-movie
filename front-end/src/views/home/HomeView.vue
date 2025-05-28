@@ -2,23 +2,41 @@
   <div class="max-w-7xl mx-auto px-4 pt-20">
     <HeroBanner />
     <GenreFilter />
-    <MovieSection title="🎬 Em Cartaz" :movies="nowPlaying" />
-    <MovieSection title="🔥 Em Alta" :movies="trending" />
-    <MovieSection title="⭐ Populares" :movies="popular" />
+
+    <MovieSection
+        v-if="!isTrendingLoading"
+        title="🎬 Em Cartaz"
+        :movies="nowPlaying"
+    />
+
+    <SpinnerLoading v-if="isTrendingLoading" />
+
+    <MovieSection
+        v-if="!isTrendingLoading"
+        title="🔥 Em Alta"
+        :movies="[...trendingMovies].reverse()"
+    />
+
+    <MovieGrid
+        v-if="popularMovies.length"
+        title="⭐ Populares"
+        :movies="popularMovies"
+    />
+
   </div>
 </template>
 
 <script setup lang="ts">
+import HeroBanner from '@/components/hero-banner/HeroBanner.vue'
+import GenreFilter from '@/components/genre-filter/GenreFilter.vue'
+import MovieSection from '@/components/movie-section/MovieSection.vue'
+import SpinnerLoading from '@/components/spinner-loading/SpinnerLoading.vue'
+import { useNowPlaying } from '@/composables/useNowPlaying'
+import { useTrendingMovies } from '@/composables/useTrendingMovies'
+import MovieGrid from "@/components/movie-grid/MovieGrid.vue";
+import { usePopularMovies } from '@/composables/usePopularMovies'
 
-import HeroBanner from "@/components/hero-banner/HeroBanner.vue";
-import GenreFilter from "@/components/genre-filter/GenreFilter.vue";
-import MovieSection from "@/components/movie-section/MovieSection.vue";
-
-const nowPlaying = [/* array de filmes */]
-const trending = [/* array de filmes */]
-const popular = [/* array de filmes */]
+const { movies: nowPlaying } = useNowPlaying()
+const { trendingMovies, isTrendingLoading } = useTrendingMovies()
+const { movies: popularMovies } = usePopularMovies()
 </script>
-
-<style scoped>
-
-</style>
