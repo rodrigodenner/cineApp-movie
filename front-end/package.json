@@ -11,8 +11,12 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.9.0",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-autoplay": "^8.6.0",
     "pinia": "^3.0.1",
+    "tailwindcss": "^4.1.7",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
