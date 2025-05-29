@@ -53,7 +53,7 @@ onMounted(() => {
       <button
           v-if="selectedGenres.length"
           @click="clearFilters"
-          class="text-sm text-red-400 hover:text-red-500 underline"
+          class="text-sm text-red-400 hover:text-red-500 underline cursor-pointer"
       >
         Limpar filtros
       </button>

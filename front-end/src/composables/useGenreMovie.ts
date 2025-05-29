@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { getMoviesByGenre } from '@/services/movieService'
 
-export function useGenreMovies() {
+export function useGenreMovies(options?: { onError?: () => void }) {
   const selectedGenres = ref<number[]>([])
   const movies = ref<any[]>([])
   const loading = ref(false)
@@ -30,11 +30,11 @@ export function useGenreMovies() {
       )
     } catch (error) {
       console.error('Erro ao buscar filmes por múltiplos gêneros:', error)
+      options?.onError?.()
     } finally {
       loading.value = false
     }
   }
-
 
   return {
     selectedGenres,

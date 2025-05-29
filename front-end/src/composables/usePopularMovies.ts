@@ -1,7 +1,7 @@
 import { ref, onMounted } from 'vue'
 import { getPopularMovies } from '@/services/movieService'
 
-export function usePopularMovies() {
+export function usePopularMovies(options?: { onError?: () => void }) {
   const movies = ref<any[]>([])
   const isLoading = ref(false)
   const currentPage = ref(1)
@@ -14,6 +14,7 @@ export function usePopularMovies() {
       currentPage.value++
     } catch (error) {
       console.error('Erro ao buscar filmes populares:', error)
+      options?.onError?.()
     } finally {
       isLoading.value = false
     }

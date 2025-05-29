@@ -1,7 +1,7 @@
 import { ref, onMounted } from 'vue'
 import { getTrending } from '@/services/movieService'
 
-export function useTrendingMovies() {
+export function useTrendingMovies(options?: { onError?: () => void }) {
   const trendingMovies = ref<any[]>([])
   const isLoading = ref(false)
   const currentPage = ref(1)
@@ -16,6 +16,7 @@ export function useTrendingMovies() {
       currentPage.value++
     } catch (error) {
       console.error('Erro ao buscar filmes em alta:', error)
+      options?.onError?.()
     } finally {
       isLoading.value = false
     }

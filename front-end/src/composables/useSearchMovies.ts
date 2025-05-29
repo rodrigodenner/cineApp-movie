@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { getMoviesBySearch } from '@/services/movieService'
 
-export const useSearchMovies = () => {
+export const useSearchMovies = (options?: { onError?: () => void }) => {
   const movies = ref<any[]>([])
   const loading = ref(false)
   const page = ref(1)
@@ -28,6 +28,7 @@ export const useSearchMovies = () => {
       page.value++
     } catch (e) {
       console.error('Erro ao buscar filmes:', e)
+      options?.onError?.()
     } finally {
       loading.value = false
     }
