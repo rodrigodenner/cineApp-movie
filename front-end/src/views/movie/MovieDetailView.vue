@@ -7,10 +7,11 @@
       <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 to-transparent"></div>
       <button
           @click="router.back()"
-          class="absolute top-4 left-4 text-sm text-white bg-zinc-800/70 px-3 py-1 rounded hover:bg-zinc-700 transition"
+          class="absolute top-24 left-4 text-lg font-bold text-red-500 bg-zinc-800/70 px-3 py-1 rounded-full hover:bg-zinc-700 transition cursor-pointer"
       >
         ← Voltar
       </button>
+
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10">
