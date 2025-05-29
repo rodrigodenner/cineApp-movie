@@ -11,10 +11,10 @@
 
     <SpinnerLoading v-if="isTrendingLoading" />
 
-    <MovieSection
-        v-if="!isTrendingLoading"
-        title="🔥 Em Alta"
-        :movies="[...trendingMovies].reverse()"
+    <MovieGrid
+            v-if="!isTrendingLoading"
+            title="🔥 Em Alta"
+            :movies="trendingMovies"
     />
 
     <MovieGrid
