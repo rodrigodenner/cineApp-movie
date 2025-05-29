@@ -255,42 +255,6 @@
                 ]
             }
         },
-        "/api/movies/{id}": {
-            "get": {
-                "tags": [
-                    "Movies"
-                ],
-                "summary": "Detalhes de um filme",
-                "operationId": "0665e4e5eeb4738291d9733b6015218b",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Detalhes do filme",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/TMDBMovie"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ]
-            }
-        },
         "/api/movies/popular": {
             "get": {
                 "tags": [
@@ -779,6 +743,53 @@
                     "overview": {
                         "type": "string",
                         "example": "Um homem insatisfeito com sua vida conhece Tyler..."
+                    },
+                    "vote_average": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 8.4
+                    }
+                },
+                "type": "object"
+            },
+            "MovieDetail": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 550
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Fight Club"
+                    },
+                    "poster_path": {
+                        "type": "string",
+                        "example": "https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 18
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Drama"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "overview": {
+                        "type": "string",
+                        "example": "Um homem insatisfeito com sua vida conhece Tyler..."
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1999-10-15"
                     },
                     "vote_average": {
                         "type": "number",

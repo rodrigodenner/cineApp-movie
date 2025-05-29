@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\FavoriteMovieRequest;
+use App\Http\Resources\MovieDetailResource;
 use App\Http\Resources\MovieResource;
 use App\Http\Resources\TMDBMovieResource;
 use App\Services\Movie\FavoriteMovieService;
@@ -72,7 +73,7 @@ class MovieController extends Controller
     {
         $query = $request->query('query');
         $page = $request->query('page', 1);
-        $movies = $service->execute($query, (int) $page);
+        $movies = $service->execute($query, (int)$page);
         return response()->json([
             'data' => TMDBMovieResource::collection($movies['results'] ?? []),
             'meta' => [
@@ -86,20 +87,32 @@ class MovieController extends Controller
 
 
     /**
-     * @OA\Get(
-     *     path="/api/movies/{id}",
-     *     tags={"Movies"},
-     *     summary="Detalhes de um filme",
-     *     security={{"Bearer":{}}},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Detalhes do filme", @OA\JsonContent(ref="#/components/schemas/TMDBMovie"))
+     * @OA\Schema(
+     *     schema="MovieDetail",
+     *     type="object",
+     *     @OA\Property(property="id", type="integer", example=550),
+     *     @OA\Property(property="title", type="string", example="Fight Club"),
+     *     @OA\Property(property="poster_path", type="string", example="https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"),
+     *     @OA\Property(
+     *         property="genres",
+     *         type="array",
+     *         @OA\Items(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=18),
+     *             @OA\Property(property="name", type="string", example="Drama")
+     *         )
+     *     ),
+     *     @OA\Property(property="overview", type="string", example="Um homem insatisfeito com sua vida conhece Tyler..."),
+     *     @OA\Property(property="release_date", type="string", format="date", example="1999-10-15"),
+     *     @OA\Property(property="vote_average", type="number", format="float", example=8.4)
      * )
      */
     public function show(int $id, GetMovieDetailsService $service)
     {
         $movie = $service->execute($id);
-        return new TMDBMovieResource($movie);
+        return new MovieDetailResource($movie);
     }
+
 
     /**
      * @OA\Get(
