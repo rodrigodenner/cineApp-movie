@@ -1,15 +1,29 @@
 <script setup lang="ts">
-defineProps({ movie: Object })
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  movie: {
+    type: Object,
+    required: true,
+  },
+})
+
+const router = useRouter()
+
+const goToDetails = () => {
+  router.push({ name: 'movie-detail', params: { id: props.movie.id } })
+}
 </script>
 
 <template>
-  <img
-      :src="movie.poster_path"
-      :alt="movie.title"
-      class="rounded-xl w-36 h-52 object-cover"
-  />
+  <div
+      @click="goToDetails"
+      class="cursor-pointer transition-transform hover:scale-105"
+  >
+    <img
+        :src="movie.poster_path"
+        :alt="movie.title"
+        class="rounded-xl w-36 h-52 object-cover"
+    />
+  </div>
 </template>
-
-<style scoped>
-
-</style>

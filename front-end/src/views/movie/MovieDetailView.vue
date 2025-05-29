@@ -1,0 +1,112 @@
+<template>
+  <div class="min-h-screen bg-zinc-900 text-white">
+    <div
+        class="relative w-full h-[500px] bg-cover bg-center"
+        :style="`background-image: url(${movie?.poster_path})`"
+    >
+      <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 to-transparent"></div>
+      <button
+          @click="router.back()"
+          class="absolute top-4 left-4 text-sm text-white bg-zinc-800/70 px-3 py-1 rounded hover:bg-zinc-700 transition"
+      >
+        ← Voltar
+      </button>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10">
+      <img
+          :src="movie?.poster_path"
+          :alt="movie?.title"
+          class="w-52 h-72 rounded-xl object-cover shadow-lg"
+      />
+
+      <div class="flex-1">
+        <h1 class="text-4xl font-bold mb-3">{{ movie?.title }}</h1>
+
+        <div class="flex items-center gap-4 text-zinc-400 text-sm mb-4">
+          <span>⭐ <strong class="text-white">{{ movie?.vote_average?.toFixed(1) }}</strong> /10</span>
+          <span>📅 {{ releaseYear }}</span>
+          <span>⏱️ 120 min</span>
+        </div>
+
+        <div class="flex gap-2 flex-wrap mb-6">
+          <span
+              v-for="genre in movie?.genres"
+              :key="genre.id"
+              class="bg-red-800 text-white px-3 py-1 rounded-full text-sm"
+          >
+            {{ genre.name }}
+          </span>
+        </div>
+
+        <h2 class="text-xl font-semibold mb-2">Sinopse</h2>
+        <p class="text-zinc-300 mb-6">
+          {{ movie?.overview }}
+        </p>
+
+        <button
+            @click="favorite(movie.id)"
+            :disabled="isLoading || success"
+            class="border border-white text-white rounded px-5 py-2 flex items-center gap-2 hover:bg-white hover:text-black transition"
+        >
+          <span v-if="success">❤️ Adicionado aos Favoritos</span>
+          <span v-else>🤍 Adicionar aos Favoritos</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 pb-20" v-if="relatedMovies.length">
+      <MovieSection title="🎥 Filmes Relacionados" :movies="relatedMovies" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getMovieDetails, getMoviesByGenre } from '@/services/movieService'
+import { useMovieFavorite } from '@/composables/useMovieFavorite'
+import MovieSection from '@/components/movie-section/MovieSection.vue'
+
+const route = useRoute()
+const router = useRouter()
+
+const movie = ref<any>(null)
+const relatedMovies = ref<any[]>([])
+
+const { favorite, isLoading, success } = useMovieFavorite()
+
+const releaseYear = computed(() =>
+    movie.value?.release_date
+        ? new Date(movie.value.release_date).getFullYear()
+        : ''
+)
+
+onMounted(async () => {
+  const response = await getMovieDetails(Number(route.params.id))
+  movie.value = response.data.data
+
+  const genreIds = movie.value.genres.map((g: any) => g.id)
+  const relatedSet = new Map<number, any>()
+
+  for (const genreId of genreIds) {
+    if (relatedSet.size >= 16) break
+
+    try {
+      const res = await getMoviesByGenre(genreId)
+      const filtered = res.data.data.filter((m: any) => m.id !== movie.value.id)
+
+      for (const item of filtered) {
+        if (!relatedSet.has(item.id)) {
+          relatedSet.set(item.id, item)
+          if (relatedSet.size >= 16) break
+        }
+      }
+    } catch (err) {
+      console.warn(`Erro ao buscar filmes para o gênero ${genreId}:`, err)
+    }
+  }
+
+  relatedMovies.value = Array.from(relatedSet.values())
+})
+</script>

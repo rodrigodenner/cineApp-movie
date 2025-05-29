@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: () => import('@/views/home/HomeView.vue'),
   },
   {
     path: '/profile',
@@ -28,6 +28,12 @@ const routes = [
     component: () => import('@/views/profile/ProfileView.vue'),
     beforeEnter: requireAuth,
   },
+  {
+    path: '/movies/:id',
+    name: 'movie-detail',
+    component: () => import('@/views/movie/MovieDetailView.vue'),
+  }
+
 ]
 
 const router = createRouter({
