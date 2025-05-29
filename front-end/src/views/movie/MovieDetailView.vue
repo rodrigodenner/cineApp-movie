@@ -64,17 +64,18 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getMovieDetails, getMoviesByGenre } from '@/services/movieService'
+import { getMovieDetails } from '@/services/movieService'
 import { useMovieFavorite } from '@/composables/useMovieFavorite'
+import { useRelatedMovies } from '@/composables/useRelatedMovies'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const movie = ref<any>(null)
-const relatedMovies = ref<any[]>([])
 
 const { favorite, isLoading, success } = useMovieFavorite()
+const { relatedMovies, fetchRelatedMovies } = useRelatedMovies()
 
 const releaseYear = computed(() =>
     movie.value?.release_date
@@ -87,26 +88,7 @@ onMounted(async () => {
   movie.value = response.data.data
 
   const genreIds = movie.value.genres.map((g: any) => g.id)
-  const relatedSet = new Map<number, any>()
-
-  for (const genreId of genreIds) {
-    if (relatedSet.size >= 16) break
-
-    try {
-      const res = await getMoviesByGenre(genreId)
-      const filtered = res.data.data.filter((m: any) => m.id !== movie.value.id)
-
-      for (const item of filtered) {
-        if (!relatedSet.has(item.id)) {
-          relatedSet.set(item.id, item)
-          if (relatedSet.size >= 16) break
-        }
-      }
-    } catch (err) {
-      console.warn(`Erro ao buscar filmes para o gênero ${genreId}:`, err)
-    }
-  }
-
-  relatedMovies.value = Array.from(relatedSet.values())
+  await fetchRelatedMovies(movie.value.id, genreIds, 16)
 })
 </script>
+
