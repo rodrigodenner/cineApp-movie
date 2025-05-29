@@ -10,10 +10,11 @@ class SearchMovieService
     {
     }
 
-    public function execute(string $query): array
+    public function execute(string $query, int $page = 1): array
     {
         return $this->client->get('search/movie', [
             'query' => $query,
+            'page' => $page,
         ]);
     }
 }

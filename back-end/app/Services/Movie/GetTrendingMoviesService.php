@@ -10,9 +10,11 @@ class GetTrendingMoviesService
     {
     }
 
-    public function execute(string $period = 'day'): array
+    public function execute(string $period = 'day', int $page = 1): array
     {
-        return $this->client->get("trending/movie/{$period}");
+        return $this->client->get("trending/movie/{$period}", [
+            'page' => $page,
+        ]);
     }
 }
 

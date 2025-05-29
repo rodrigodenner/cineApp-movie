@@ -52,14 +52,38 @@ class MovieController extends Controller
      *     summary="Buscar filmes por nome",
      *     security={{"Bearer":{}}},
      *     @OA\Parameter(name="query", in="query", required=true, description="Texto para busca no título do filme", @OA\Schema(type="string")),
-     *     @OA\Response(response=200, description="Lista de filmes", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")))
+     *     @OA\Parameter(name="page", in="query", required=false, description="Número da página", @OA\Schema(type="integer", default=1)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de filmes",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")),
+     *             @OA\Property(property="meta", type="object",
+     *                 @OA\Property(property="page", type="integer", example=1),
+     *                 @OA\Property(property="total_results", type="integer", example=10000),
+     *                 @OA\Property(property="total_pages", type="integer", example=500),
+     *                 @OA\Property(property="query", type="string", example="batman")
+     *             )
+     *         )
+     *     )
      * )
      */
     public function search(Request $request, SearchMovieService $service)
     {
-        $movies = $service->execute($request->query('query'));
-        return TMDBMovieResource::collection($movies['results'] ?? []);
+        $query = $request->query('query');
+        $page = $request->query('page', 1);
+        $movies = $service->execute($query, (int) $page);
+        return response()->json([
+            'data' => TMDBMovieResource::collection($movies['results'] ?? []),
+            'meta' => [
+                'page' => $movies['page'] ?? 1,
+                'total_results' => $movies['total_results'] ?? null,
+                'total_pages' => $movies['total_pages'] ?? null,
+                'query' => $query,
+            ],
+        ]);
     }
+
 
     /**
      * @OA\Get(
@@ -83,14 +107,35 @@ class MovieController extends Controller
      *     tags={"Movies"},
      *     summary="Listar filmes populares",
      *     security={{"Bearer":{}}},
-     *     @OA\Response(response=200, description="Lista de filmes", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")))
+     *     @OA\Parameter(name="page", in="query", required=false, description="Número da página", @OA\Schema(type="integer", default=1)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de filmes",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")),
+     *             @OA\Property(property="meta", type="object",
+     *                 @OA\Property(property="page", type="integer", example=1),
+     *                 @OA\Property(property="total_results", type="integer", example=10000),
+     *                 @OA\Property(property="total_pages", type="integer", example=500)
+     *             )
+     *         )
+     *     )
      * )
      */
-    public function popular(GetPopularMoviesService $service)
+    public function popular(Request $request, GetPopularMoviesService $service)
     {
-        $movies = $service->execute();
-        return TMDBMovieResource::collection($movies['results'] ?? []);
+        $page = $request->query('page', 1);
+        $movies = $service->execute((int)$page);
+        return response()->json([
+            'data' => TMDBMovieResource::collection($movies['results'] ?? []),
+            'meta' => [
+                'page' => $movies['page'] ?? 1,
+                'total_results' => $movies['total_results'] ?? null,
+                'total_pages' => $movies['total_pages'] ?? null,
+            ],
+        ]);
     }
+
 
     /**
      * @OA\Get(
@@ -113,14 +158,40 @@ class MovieController extends Controller
      *     tags={"Movies"},
      *     summary="Filmes em alta",
      *     security={{"Bearer":{}}},
-     *     @OA\Response(response=200, description="Filmes em alta", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")))
+     *     @OA\Parameter(name="period", in="query", required=false, description="Período da tendência (day ou week)", @OA\Schema(type="string", enum={"day", "week"}, default="day")),
+     *     @OA\Parameter(name="page", in="query", required=false, description="Número da página", @OA\Schema(type="integer", default=1)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Filmes em alta",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")),
+     *             @OA\Property(property="meta", type="object",
+     *                 @OA\Property(property="page", type="integer", example=1),
+     *                 @OA\Property(property="total_results", type="integer", example=10000),
+     *                 @OA\Property(property="total_pages", type="integer", example=500),
+     *                 @OA\Property(property="period", type="string", example="day")
+     *             )
+     *         )
+     *     )
      * )
      */
-    public function trending(GetTrendingMoviesService $service)
+    public function trending(Request $request, GetTrendingMoviesService $service)
     {
-        $movies = $service->execute();
-        return TMDBMovieResource::collection($movies['results'] ?? []);
+        $page = $request->query('page', 1);
+        $period = $request->query('period', 'day');
+        $movies = $service->execute($period, (int)$page);
+
+        return response()->json([
+            'data' => TMDBMovieResource::collection($movies['results'] ?? []),
+            'meta' => [
+                'page' => $movies['page'] ?? 1,
+                'total_results' => $movies['total_results'] ?? null,
+                'total_pages' => $movies['total_pages'] ?? null,
+                'period' => $period,
+            ],
+        ]);
     }
+
 
     /**
      * @OA\Get(
@@ -144,14 +215,37 @@ class MovieController extends Controller
      *     summary="Filmes por gênero",
      *     security={{"Bearer":{}}},
      *     @OA\Parameter(name="genreId", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Lista de filmes", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")))
+     *     @OA\Parameter(name="page", in="query", required=false, description="Número da página", @OA\Schema(type="integer", default=1)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de filmes",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TMDBMovie")),
+     *             @OA\Property(property="meta", type="object",
+     *                 @OA\Property(property="page", type="integer", example=1),
+     *                 @OA\Property(property="total_results", type="integer", example=10000),
+     *                 @OA\Property(property="total_pages", type="integer", example=500),
+     *                 @OA\Property(property="genre_id", type="integer", example=35)
+     *             )
+     *         )
+     *     )
      * )
      */
-    public function byGenre(int $genreId, GetMoviesByGenreService $service)
+    public function byGenre(Request $request, int $genreId, GetMoviesByGenreService $service)
     {
-        $movies = $service->execute($genreId);
-        return TMDBMovieResource::collection($movies['results'] ?? []);
+        $page = $request->query('page', 1);
+        $movies = $service->execute($genreId, (int)$page);
+        return response()->json([
+            'data' => TMDBMovieResource::collection($movies['results'] ?? []),
+            'meta' => [
+                'page' => $movies['page'] ?? 1,
+                'total_results' => $movies['total_results'] ?? null,
+                'total_pages' => $movies['total_pages'] ?? null,
+                'genre_id' => $genreId,
+            ],
+        ]);
     }
+
 
     /**
      * @OA\Post(

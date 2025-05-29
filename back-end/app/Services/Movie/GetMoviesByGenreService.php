@@ -10,11 +10,13 @@ class GetMoviesByGenreService
     {
     }
 
-    public function execute(int $genreId): array
+    public function execute(int $genreId, int $page = 1): array
     {
         return $this->client->get('discover/movie', [
             'with_genres' => $genreId,
+            'page' => $page,
         ]);
     }
+
 }
 

@@ -10,9 +10,10 @@ class GetPopularMoviesService
     {
     }
 
-    public function execute(): array
+    public function execute(int $page = 1): array
     {
-        return $this->client->get('movie/popular');
+        return $this->client->get('movie/popular', ['page' => $page]);
     }
+
 }
 

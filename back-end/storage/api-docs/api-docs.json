@@ -195,6 +195,16 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
                     }
                 ],
                 "responses": {
@@ -203,10 +213,36 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/TMDBMovie"
-                                    }
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TMDBMovie"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "total_results": {
+                                                    "type": "integer",
+                                                    "example": 10000
+                                                },
+                                                "total_pages": {
+                                                    "type": "integer",
+                                                    "example": 500
+                                                },
+                                                "query": {
+                                                    "type": "string",
+                                                    "example": "batman"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -262,16 +298,50 @@
                 ],
                 "summary": "Listar filmes populares",
                 "operationId": "f80b9fb4f87241954d3206e057760091",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista de filmes",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/TMDBMovie"
-                                    }
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TMDBMovie"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "total_results": {
+                                                    "type": "integer",
+                                                    "example": 10000
+                                                },
+                                                "total_pages": {
+                                                    "type": "integer",
+                                                    "example": 500
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -320,16 +390,68 @@
                 ],
                 "summary": "Filmes em alta",
                 "operationId": "47f8fe3e03e39ed6dfdcf5cc4cc3ea29",
+                "parameters": [
+                    {
+                        "name": "period",
+                        "in": "query",
+                        "description": "Período da tendência (day ou week)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "day",
+                            "enum": [
+                                "day",
+                                "week"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Filmes em alta",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/TMDBMovie"
-                                    }
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TMDBMovie"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "total_results": {
+                                                    "type": "integer",
+                                                    "example": 10000
+                                                },
+                                                "total_pages": {
+                                                    "type": "integer",
+                                                    "example": 500
+                                                },
+                                                "period": {
+                                                    "type": "string",
+                                                    "example": "day"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -394,6 +516,16 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número da página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
                     }
                 ],
                 "responses": {
@@ -402,10 +534,36 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/TMDBMovie"
-                                    }
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TMDBMovie"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "total_results": {
+                                                    "type": "integer",
+                                                    "example": 10000
+                                                },
+                                                "total_pages": {
+                                                    "type": "integer",
+                                                    "example": 500
+                                                },
+                                                "genre_id": {
+                                                    "type": "integer",
+                                                    "example": 35
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
