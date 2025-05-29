@@ -62,7 +62,7 @@ const {
 const isGenreSelected = computed(() => selectedGenres.value.length > 0)
 
 const handleGenreSelect = async (genreIds: number[]) => {
-  if (genreIds.length === 0) return
   await fetchMoviesByGenres(genreIds)
 }
+
 </script>

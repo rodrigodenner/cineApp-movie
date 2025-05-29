@@ -7,6 +7,13 @@ export function useGenreMovies() {
   const loading = ref(false)
 
   const fetchMoviesByGenres = async (genreIds: number[]) => {
+    if (genreIds.includes(0)) {
+      selectedGenres.value = []
+      movies.value = []
+      loading.value = false
+      return
+    }
+
     selectedGenres.value = genreIds
     loading.value = true
     movies.value = []
@@ -17,19 +24,17 @@ export function useGenreMovies() {
 
       const combined = results.flatMap(res => res.data.data)
 
-      // Remover filmes duplicados
-      const uniqueMovies = combined.filter(
+      movies.value = combined.filter(
           (movie, index, self) =>
               self.findIndex((m) => m.id === movie.id) === index
       )
-
-      movies.value = uniqueMovies
     } catch (error) {
       console.error('Erro ao buscar filmes por múltiplos gêneros:', error)
     } finally {
       loading.value = false
     }
   }
+
 
   return {
     selectedGenres,

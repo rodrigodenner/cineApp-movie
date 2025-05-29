@@ -1,27 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useGenres } from '@/composables/useGenres'
 
 const emit = defineEmits(['select'])
-
-const selectedGenres = ref<number[]>([])
+const selectedGenres = ref<number[]>([0])
 const { genres, loading } = useGenres()
 
 const handleSelect = (id: number) => {
-  if (selectedGenres.value.includes(id)) {
-    selectedGenres.value = selectedGenres.value.filter((g) => g !== id)
-  } else if (selectedGenres.value.length < 3) {
-    selectedGenres.value.push(id)
+  const maxSelection = 3
+
+  if (id === 0) {
+    selectedGenres.value = [0]
+    emit('select', [...selectedGenres.value])
+    return
   }
 
+  selectedGenres.value = selectedGenres.value.filter((g) => g !== 0)
+
+  const alreadySelected = selectedGenres.value.includes(id)
+  if (alreadySelected) {
+    selectedGenres.value = selectedGenres.value.filter((g) => g !== id)
+    emit('select', [...selectedGenres.value])
+    return
+  }
+
+  if (selectedGenres.value.length >= maxSelection) return
+
+  selectedGenres.value.push(id)
   emit('select', [...selectedGenres.value])
 }
 
+
 const clearFilters = () => {
-  selectedGenres.value = []
+  selectedGenres.value = [0]
   emit('select', [])
 }
+
+onMounted(() => {
+  if (!selectedGenres.value.length) {
+    selectedGenres.value = [0]
+    emit('select', [0])
+  }
+})
 </script>
+
 
 <template>
   <section class="mb-12">

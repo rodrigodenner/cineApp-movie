@@ -16,10 +16,7 @@ export const useGenres = () => {
     }
   }
 
-
-
   onMounted(fetchGenres)
-
   return {
     genres,
     loading,
