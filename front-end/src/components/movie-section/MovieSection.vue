@@ -47,7 +47,7 @@ onMounted(() => {
         <div class="flex gap-4">
           <!-- 8 por tela -->
           <div
-              v-for="movie in movies"
+              v-for="movie in movies.filter(m => m.id)"
               :key="movie.id"
               class="px-2
               flex-[0_0_50%]

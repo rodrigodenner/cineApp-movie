@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed,watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getMovieDetails } from '@/services/movieService'
 import { useMovieFavorite } from '@/composables/useMovieFavorite'
@@ -71,6 +71,7 @@ import { useRelatedMovies } from '@/composables/useRelatedMovies'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 import {useAuthStore} from "@/stores/auth.ts";
 import {useModalStore} from "@/stores/useModalStore.ts";
+
 
 const route = useRoute()
 const router = useRouter()
@@ -98,6 +99,18 @@ const handleFavoriteClick = () => {
 
 onMounted(async () => {
   const response = await getMovieDetails(Number(route.params.id))
+  movie.value = response.data.data
+
+  const genreIds = movie.value.genres.map((g: any) => g.id)
+  await fetchRelatedMovies(movie.value.id, genreIds, 16)
+
+  if (authStore.isAuthenticated) {
+    await checkIfFavorite(movie.value.id)
+  }
+})
+
+watch(() => route.params.id, async (newId) => {
+  const response = await getMovieDetails(Number(newId))
   movie.value = response.data.data
 
   const genreIds = movie.value.genres.map((g: any) => g.id)
