@@ -11,7 +11,6 @@
       >
         ← Voltar
       </button>
-
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10">
@@ -46,13 +45,14 @@
         </p>
 
         <button
-            @click="favorite(movie.id)"
-            :disabled="isLoading || success"
-            class="border border-white text-white rounded px-5 py-2 flex items-center gap-2 hover:bg-white hover:text-black transition"
+            @click="handleFavoriteClick"
+            :disabled="isLoading"
+            class="border border-white text-white rounded px-5 py-2 flex items-center gap-2 hover:bg-red-800 cursor-pointer hover:text-white transition"
         >
-          <span v-if="success">❤️ Adicionado aos Favoritos</span>
-          <span v-else>🤍 Adicionar aos Favoritos</span>
+          <span v-if="isFavorite"><span class="mr-2">❤️</span> Remover dos Favoritos</span>
+          <span v-else><span class="mr-2">🤍</span> Adicionar aos Favoritos</span>
         </button>
+
       </div>
     </div>
 
@@ -69,13 +69,16 @@ import { getMovieDetails } from '@/services/movieService'
 import { useMovieFavorite } from '@/composables/useMovieFavorite'
 import { useRelatedMovies } from '@/composables/useRelatedMovies'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
+import {useAuthStore} from "@/stores/auth.ts";
+import {useModalStore} from "@/stores/useModalStore.ts";
 
 const route = useRoute()
 const router = useRouter()
-
+const authStore = useAuthStore()
+const modalStore = useModalStore()
 const movie = ref<any>(null)
 
-const { favorite, isLoading, success } = useMovieFavorite()
+const { isFavorite, isLoading, toggleFavorite, checkIfFavorite } = useMovieFavorite()
 const { relatedMovies, fetchRelatedMovies } = useRelatedMovies()
 
 const releaseYear = computed(() =>
@@ -84,12 +87,25 @@ const releaseYear = computed(() =>
         : ''
 )
 
+const handleFavoriteClick = () => {
+  if (!authStore.isAuthenticated) {
+    modalStore.showLogin()
+    return
+  }
+
+  toggleFavorite(movie.value.id)
+}
+
 onMounted(async () => {
   const response = await getMovieDetails(Number(route.params.id))
   movie.value = response.data.data
 
   const genreIds = movie.value.genres.map((g: any) => g.id)
   await fetchRelatedMovies(movie.value.id, genreIds, 16)
-})
-</script>
 
+  if (authStore.isAuthenticated) {
+    await checkIfFavorite(movie.value.id)
+  }
+})
+
+</script>

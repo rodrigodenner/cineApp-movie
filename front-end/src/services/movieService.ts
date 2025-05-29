@@ -1,4 +1,5 @@
 import axios from 'axios'
+import api from "@/services/authService.ts";
 
 export const getNowPlaying = async () => {
   return axios.get(`${import.meta.env.VITE_API_URL}/movies/now-playing`)
@@ -24,8 +25,15 @@ export const getMoviesBySearch = async (query: string, page = 1) => {
   return axios.get(`${import.meta.env.VITE_API_URL}/movies/search?query=${query}&page=${page}`)
 }
 
+
 export const favoriteMovie = async (tmdbId: number) => {
-  return axios.post(`${import.meta.env.VITE_API_URL}/movies/favorite`, {
-    tmdb_id: tmdbId,
-  })
+  return api.post('/movies/favorite', { tmdb_id: tmdbId })
+}
+
+export const unfavoriteMovie = async (tmdbId: number) => {
+  return api.delete(`/movies/favorites/${tmdbId}`)
+}
+
+export const getFavoriteMovies = async () => {
+  return api.get('/movies/favorites')
 }
