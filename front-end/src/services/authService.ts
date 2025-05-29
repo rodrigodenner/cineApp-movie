@@ -39,4 +39,13 @@ export const register = async (payload: {
   return api.post('/auth/register', payload)
 }
 
+export const updateUser = async (payload: { name: string; password?: string; new_password?: string; new_password_confirmation?: string }) => {
+  return api.put('/auth/user', payload)
+}
+
+export const deleteUser = async () => {
+  return api.delete('/auth/user')
+}
+
+
 export default api

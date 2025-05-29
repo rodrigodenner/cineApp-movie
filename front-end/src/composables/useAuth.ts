@@ -1,6 +1,10 @@
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { login } from '@/services/authService'
+import {
+  login,
+  updateUser as apiUpdateUser,
+  deleteUser as apiDeleteUser
+} from '@/services/authService'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
@@ -20,8 +24,42 @@ export const useAuth = () => {
     }
   }
 
+  const updateUser = async (payload: {
+    name: string
+    email: string
+    new_password?: string
+    new_password_confirmation?: string
+  }): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const response = await apiUpdateUser(payload)
+      const updatedUser = response.data
+
+      if (updatedUser) {
+        authStore.setSession(authStore.token, updatedUser)
+      }
+
+      return { success: true }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || 'Erro ao atualizar perfil.'
+      return { success: false, error: msg }
+    }
+  }
+
+  const deleteUser = async (): Promise<{ success: boolean; error?: string }> => {
+    try {
+      await apiDeleteUser()
+      authStore.logout()
+      return { success: true }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || 'Erro ao excluir conta.'
+      return { success: false, error: msg }
+    }
+  }
+
   return {
     loginUser,
+    updateUser,
+    deleteUser,
     isAuthenticated: computed(() => authStore.isAuthenticated),
     user: computed(() => authStore.user),
   }

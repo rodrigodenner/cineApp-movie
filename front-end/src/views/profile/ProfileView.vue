@@ -4,12 +4,15 @@ import { useAuthStore } from '@/stores/auth'
 import { getFavoriteMovies } from '@/services/movieService'
 import GenreFilter from '@/components/genre-filter/GenreFilter.vue'
 import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
+import ProfileEditModal from "@/components/auth-modals/profile-edit/ProfileEditModal.vue";
+
 
 const authStore = useAuthStore()
 const search = ref('')
 const selectedGenres = ref<number[]>([])
 const movies = ref([])
 const loading = ref(false)
+const showEditModal = ref(false)
 
 let debounceTimer: ReturnType<typeof setTimeout>
 
@@ -58,14 +61,17 @@ onMounted(() => {
       <h2 class="mt-4 text-2xl font-bold">{{ authStore.user?.name }}</h2>
       <p class="text-zinc-400">{{ authStore.user?.email }}</p>
       <button
-          class="mt-4 text-sm px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 transition"
-          @click="$emit('edit-profile')"
+          class="mt-4 text-sm px-4 py-2 rounded bg-zinc-700 hover:bg-zinc-600 cursor-pointer transition"
+          @click="showEditModal = true"
       >
         ⚙️ Editar Perfil
       </button>
     </div>
 
-    <h2 class="text-2xl font-bold mb-2">❤️ Meus Favoritos <span class="text-sm text-zinc-400">({{ movies.length }})</span></h2>
+    <h2 class="text-2xl font-bold mb-2">
+      ❤️ Meus Favoritos
+      <span class="text-sm text-zinc-400">({{ movies.length }})</span>
+    </h2>
 
     <div class="bg-zinc-800 rounded-lg p-6 mb-10 border border-zinc-700">
       <label class="block text-sm text-zinc-400 mb-2">Buscar por título</label>
@@ -101,5 +107,7 @@ onMounted(() => {
     <div v-else class="text-zinc-400 text-sm">
       Nenhum favorito encontrado com os filtros aplicados.
     </div>
+
+    <ProfileEditModal v-if="showEditModal" @close="showEditModal = false" />
   </div>
 </template>
