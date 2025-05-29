@@ -15,6 +15,6 @@ export const getPopularMovies = async (page = 1) => {
 }
 
 
-export const getMoviesByGenre = async (genreId: number) => {
-  return axios.get(`${import.meta.env.VITE_API_URL}/movies/genre/${genreId}`)
+export const getMoviesByGenre = async (genreId: number, page = 1) => {
+  return axios.get(`${import.meta.env.VITE_API_URL}/movies/genre/${genreId}?page=${page}`)
 }

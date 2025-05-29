@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue'
 import EmblaCarousel from 'embla-carousel'
 import Autoplay from 'embla-carousel-autoplay'
 
-// Imagens locais
 import BannerAbstract from '@/assets/img/banner/banner-abstract.jpeg'
 import BannerMatrix from '@/assets/img/banner/banner-matrix.jpeg'
 
