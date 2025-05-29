@@ -16,4 +16,6 @@ export const getMoviesByGenre = async (genreId: number, page = 1) => {
   return axios.get(`${import.meta.env.VITE_API_URL}/movies/genre/${genreId}?page=${page}`)
 }
 
-
+export const getMoviesBySearch = async (query: string, page = 1) => {
+  return axios.get(`${import.meta.env.VITE_API_URL}/movies/search?query=${query}&page=${page}`)
+}

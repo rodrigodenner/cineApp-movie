@@ -1,22 +1,31 @@
 <script setup lang="ts">
-import AuthModals from '@/components/auth-modals/Index.vue'
-import { useRouter } from 'vue-router'
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import AuthModals from '@/components/auth-modals/Index.vue'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
+
+const search = ref(route.query.q?.toString() || '')
 
 onMounted(() => {
   authStore.loadFromStorage()
 })
 
 const isLoggedIn = computed(() => authStore.isAuthenticated)
-const userName = computed(() => authStore.user?.name || 'Usuário')
+const userName = computed(() => authStore.user?.name)
 
-function logout() {
+const logout = () => {
   authStore.logout()
   router.push('/')
+}
+
+const handleSearch = () => {
+  if (search.value.trim()) {
+    router.push({ name: 'home', query: { q: search.value.trim() } })
+  }
 }
 </script>
 
@@ -31,11 +40,12 @@ function logout() {
         <span class="text-red-500 text-xl font-bold">CineApp</span>
       </div>
 
-
       <input
+          v-model="search"
+          @keyup.enter="handleSearch"
           type="text"
           placeholder="Buscar filmes..."
-          class="w-full max-w-md bg-zinc-800 text-sm text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          class="w-full max-w-md bg-zinc-800 text-sm text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
       />
 
       <div v-if="isLoggedIn" class="flex items-center gap-2 text-white">
@@ -43,10 +53,6 @@ function logout() {
             @click="router.push('/profile')"
             class="flex items-center gap-1 text-sm px-3 py-1 rounded-md hover:bg-red-600 transition-colors cursor-pointer"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5.121 17.804A10.015 10.015 0 0112 15c2.21 0 4.252.716 5.879 1.927M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
           {{ userName }}
         </button>
 
