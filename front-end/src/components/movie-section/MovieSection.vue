@@ -48,11 +48,11 @@ onMounted(() => {
               v-for="movie in movies"
               :key="movie.id"
               class="px-2
-    flex-[0_0_50%]
-    sm:flex-[0_0_33.3333%]
-    md:flex-[0_0_25%]
-    lg:flex-[0_0_16.6667%]
-    xl:flex-[0_0_12.5%]"
+              flex-[0_0_50%]
+              sm:flex-[0_0_33.3333%]
+              md:flex-[0_0_25%]
+              lg:flex-[0_0_16.6667%]
+              xl:flex-[0_0_12.5%]"
           >
             <MovieCard :movie="movie" />
           </div>
