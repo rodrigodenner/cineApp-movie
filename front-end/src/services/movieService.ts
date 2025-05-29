@@ -34,6 +34,8 @@ export const unfavoriteMovie = async (tmdbId: number) => {
   return api.delete(`/movies/favorites/${tmdbId}`)
 }
 
-export const getFavoriteMovies = async () => {
-  return api.get('/movies/favorites')
+export const getFavoriteMovies = async (search?: string) => {
+  const query = search ? `?search=${encodeURIComponent(search)}` : ''
+  return api.get(`/movies/favorites${query}`)
 }
+
