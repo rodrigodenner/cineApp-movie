@@ -21,7 +21,10 @@
         v-if="popularMovies.length"
         title="⭐ Populares"
         :movies="popularMovies"
+        :fetchMore="fetchPopular"
+        :loadingMore="isPopularLoading"
     />
+
 
   </div>
 </template>
@@ -38,5 +41,6 @@ import { usePopularMovies } from '@/composables/usePopularMovies'
 
 const { movies: nowPlaying } = useNowPlaying()
 const { trendingMovies, isTrendingLoading } = useTrendingMovies()
-const { movies: popularMovies } = usePopularMovies()
+const {movies: popularMovies, isLoading: isPopularLoading, fetchPopular} = usePopularMovies()
+
 </script>

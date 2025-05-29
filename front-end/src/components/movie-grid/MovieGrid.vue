@@ -43,29 +43,31 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue'
+import { ref, computed, watch } from 'vue'
 import MovieCard from '@/components/movie-card/MovieCard.vue'
 
 const props = defineProps<{
   title: string
   movies: any[]
+  fetchMore?: () => Promise<void>
+  loadingMore?: boolean
 }>()
 
 const rowsToShow = ref(2)
-const loading = ref(false)
 
 const visibleMovies = computed(() =>
     props.movies.slice(0, rowsToShow.value * 8)
 )
 
 const canShowMore = computed(() =>
-    props.movies.length > visibleMovies.value.length
+    props.movies.length >= rowsToShow.value * 8
 )
 
 const loadMore = async () => {
-  loading.value = true
-  await new Promise((resolve) => setTimeout(resolve, 800)) // Simula loading
   rowsToShow.value += 2
-  loading.value = false
+  if (props.fetchMore) {
+    await props.fetchMore()
+  }
 }
 </script>
+
