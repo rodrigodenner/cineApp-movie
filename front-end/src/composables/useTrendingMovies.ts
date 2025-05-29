@@ -2,18 +2,22 @@ import { ref, onMounted } from 'vue'
 import { getTrending } from '@/services/movieService'
 
 export function useTrendingMovies() {
-  const trendingMovies = ref([])
-  const isTrendingLoading = ref(false)
+  const trendingMovies = ref<any[]>([])
+  const isLoading = ref(false)
+  const currentPage = ref(1)
 
   const fetchTrending = async () => {
-    isTrendingLoading.value = true
+    if (isLoading.value) return
+
+    isLoading.value = true
     try {
-      const response = await getTrending()
-      trendingMovies.value = response.data.data
+      const response = await getTrending(currentPage.value)
+      trendingMovies.value.push(...response.data.data)
+      currentPage.value++
     } catch (error) {
       console.error('Erro ao buscar filmes em alta:', error)
     } finally {
-      isTrendingLoading.value = false
+      isLoading.value = false
     }
   }
 
@@ -21,6 +25,7 @@ export function useTrendingMovies() {
 
   return {
     trendingMovies,
-    isTrendingLoading,
+    isTrendingLoading: isLoading,
+    fetchTrending,
   }
 }

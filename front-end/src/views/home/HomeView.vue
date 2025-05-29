@@ -12,10 +12,13 @@
     <SpinnerLoading v-if="isTrendingLoading" />
 
     <MovieGrid
-            v-if="!isTrendingLoading"
-            title="🔥 Em Alta"
-            :movies="trendingMovies"
+        v-if="trendingMovies.length"
+        title="🔥 Em Alta"
+        :movies="trendingMovies"
+        :fetchMore="fetchTrending"
+        :loadingMore="isTrendingLoading"
     />
+
 
     <MovieGrid
         v-if="popularMovies.length"
@@ -40,7 +43,7 @@ import MovieGrid from "@/components/movie-grid/MovieGrid.vue";
 import { usePopularMovies } from '@/composables/usePopularMovies'
 
 const { movies: nowPlaying } = useNowPlaying()
-const { trendingMovies, isTrendingLoading } = useTrendingMovies()
+const { trendingMovies, isTrendingLoading, fetchTrending } = useTrendingMovies()
 const {movies: popularMovies, isLoading: isPopularLoading, fetchPopular} = usePopularMovies()
 
 </script>
