@@ -1,6 +1,5 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 pt-20">
-    <!-- Resultados da busca -->
     <template v-if="searchQuery">
       <h2 class="text-2xl font-bold mb-6">🔍 Resultados para: "{{ searchQuery }}"</h2>
 
