@@ -87,7 +87,9 @@ class AuthController extends Controller
      *     @OA\RequestBody(
      *         @OA\JsonContent(
      *             @OA\Property(property="name", type="string", example="Novo Nome"),
-     *             @OA\Property(property="email", type="string", format="email", example="novo@email.com")
+     *             @OA\Property(property="email", type="string", format="email", example="novo@email.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="novaSenha123"),
+     *             @OA\Property(property="password_confirmation", type="string", format="password", example="novaSenha123")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Usuário atualizado")
@@ -96,8 +98,13 @@ class AuthController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $user = Auth::user();
+        $data = $request->validated();
 
-        $user->update($request->validated());
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
 
         return response()->json(new UserResource($user));
     }

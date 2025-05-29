@@ -124,6 +124,16 @@
                                         "type": "string",
                                         "format": "email",
                                         "example": "novo@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "novaSenha123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "novaSenha123"
                                     }
                                 },
                                 "type": "object"
