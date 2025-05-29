@@ -13,11 +13,11 @@
     <div class="flex justify-center mt-6" v-if="canShowMore">
       <button
           @click="loadMore"
-          :disabled="loading"
+          :disabled="loadingMore"
           class="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 cursor-pointer rounded"
       >
         <svg
-            v-if="loading"
+            v-if="loadingMore"
             class="animate-spin h-5 w-5 text-white"
             viewBox="0 0 24 24"
         >
@@ -36,7 +36,7 @@
               d="M4 12a8 8 0 018-8v8z"
           />
         </svg>
-        <span v-if="!loading">Ver mais</span>
+        <span v-if="!loadingMore">Ver mais</span>
       </button>
     </div>
   </div>
