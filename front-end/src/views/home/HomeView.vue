@@ -29,15 +29,14 @@
 
     <MovieGrid
         v-if="isGenreSelected && genreMovies.length"
-        :title="`🎞️ Gênero selecionado`"
+        :title="`🎞 Filmes filtrados por gênero`"
         :movies="genreMovies"
-        :fetchMore="fetchMoreGenreMovies"
-        :loadingMore="isGenreLoading"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import HeroBanner from '@/components/hero-banner/HeroBanner.vue'
 import GenreFilter from '@/components/genre-filter/GenreFilter.vue'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
@@ -47,25 +46,23 @@ import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
 import { useNowPlaying } from '@/composables/useNowPlaying'
 import { useTrendingMovies } from '@/composables/useTrendingMovies'
 import { usePopularMovies } from '@/composables/usePopularMovies'
-import {useGenreMovies} from "@/composables/useGenreMovie.ts";
-import {computed} from "vue";
-
+import { useGenreMovies } from '@/composables/useGenreMovie.ts'
 
 const { movies: nowPlaying } = useNowPlaying()
 const { trendingMovies, isTrendingLoading, fetchTrending } = useTrendingMovies()
 const { movies: popularMovies, isLoading: isPopularLoading, fetchPopular } = usePopularMovies()
 
 const {
-  selectedGenre,
+  selectedGenres,
   movies: genreMovies,
   loading: isGenreLoading,
-  fetchMoviesByGenre,
-  fetchMoreMoviesByGenre: fetchMoreGenreMovies
+  fetchMoviesByGenres
 } = useGenreMovies()
 
-const isGenreSelected = computed(() => selectedGenre.value !== 0)
+const isGenreSelected = computed(() => selectedGenres.value.length > 0)
 
-const handleGenreSelect = async (genreId: number) => {
-  await fetchMoviesByGenre(genreId)
+const handleGenreSelect = async (genreIds: number[]) => {
+  if (genreIds.length === 0) return
+  await fetchMoviesByGenres(genreIds)
 }
 </script>

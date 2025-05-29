@@ -1,49 +1,40 @@
 import { ref } from 'vue'
 import { getMoviesByGenre } from '@/services/movieService'
 
-export const useGenreMovies = () => {
-  const selectedGenre = ref(0)
+export function useGenreMovies() {
+  const selectedGenres = ref<number[]>([])
   const movies = ref<any[]>([])
   const loading = ref(false)
-  const page = ref(1)
 
-  const fetchMoviesByGenre = async (genreId: number) => {
-    selectedGenre.value = genreId
-    page.value = 1
+  const fetchMoviesByGenres = async (genreIds: number[]) => {
+    selectedGenres.value = genreIds
+    loading.value = true
     movies.value = []
-    loading.value = true
 
     try {
-      const response = await getMoviesByGenre(genreId, page.value)
-      movies.value = response.data.data
+      const promises = genreIds.map((id) => getMoviesByGenre(id))
+      const results = await Promise.all(promises)
+
+      const combined = results.flatMap(res => res.data.data)
+
+      // Remover filmes duplicados
+      const uniqueMovies = combined.filter(
+          (movie, index, self) =>
+              self.findIndex((m) => m.id === movie.id) === index
+      )
+
+      movies.value = uniqueMovies
     } catch (error) {
-      console.error('Erro ao buscar filmes por gênero:', error)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const fetchMoreMoviesByGenre = async () => {
-    if (!selectedGenre.value) return
-
-    page.value++
-    loading.value = true
-
-    try {
-      const response = await getMoviesByGenre(selectedGenre.value, page.value)
-      movies.value.push(...response.data.data)
-    } catch (error) {
-      console.error('Erro ao buscar mais filmes por gênero:', error)
+      console.error('Erro ao buscar filmes por múltiplos gêneros:', error)
     } finally {
       loading.value = false
     }
   }
 
   return {
-    selectedGenre,
+    selectedGenres,
     movies,
     loading,
-    fetchMoviesByGenre,
-    fetchMoreMoviesByGenre,
+    fetchMoviesByGenres,
   }
 }

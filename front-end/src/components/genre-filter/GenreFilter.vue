@@ -4,18 +4,38 @@ import { useGenres } from '@/composables/useGenres'
 
 const emit = defineEmits(['select'])
 
-const selected = ref(0)
+const selectedGenres = ref<number[]>([])
 const { genres, loading } = useGenres()
 
 const handleSelect = (id: number) => {
-  selected.value = id
-  emit('select', id)
+  if (selectedGenres.value.includes(id)) {
+    selectedGenres.value = selectedGenres.value.filter((g) => g !== id)
+  } else if (selectedGenres.value.length < 3) {
+    selectedGenres.value.push(id)
+  }
+
+  emit('select', [...selectedGenres.value])
+}
+
+const clearFilters = () => {
+  selectedGenres.value = []
+  emit('select', [])
 }
 </script>
 
 <template>
   <section class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Filtrar por Gênero</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">Filtrar por Gênero</h2>
+
+      <button
+          v-if="selectedGenres.length"
+          @click="clearFilters"
+          class="text-sm text-red-400 hover:text-red-500 underline"
+      >
+        Limpar filtros
+      </button>
+    </div>
 
     <div v-if="loading" class="text-zinc-400 text-sm">Carregando...</div>
 
@@ -26,7 +46,7 @@ const handleSelect = (id: number) => {
           @click="handleSelect(genre.id)"
           :class="[
           'px-4 py-1 rounded-full transition-colors duration-200',
-          selected === genre.id
+          selectedGenres.includes(genre.id)
             ? 'bg-red-500 text-white'
             : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
         ]"
