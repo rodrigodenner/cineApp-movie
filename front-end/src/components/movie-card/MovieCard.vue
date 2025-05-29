@@ -11,7 +11,9 @@ const props = defineProps({
 const router = useRouter()
 
 const goToDetails = () => {
-  router.push({ name: 'movie-detail', params: { id: props.movie.id } })
+  const movieId = props.movie.id || props.movie.tmdb_id
+  if (!movieId) return
+  router.push({ name: 'movie-detail', params: { id: movieId } })
 }
 </script>
 
