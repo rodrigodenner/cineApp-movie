@@ -58,11 +58,12 @@ import {ref, computed, onMounted, watch} from 'vue'
 import {useRouter, useRoute} from 'vue-router'
 import {useAuthStore} from '@/stores/auth'
 import AuthModals from '@/components/auth-modals/Index.vue'
+import {useModalStore} from "@/stores/useModalStore.ts";
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
-
+const modalStore = useModalStore()
 const search = ref(route.query.q?.toString() || '')
 
 watch(() => route.query.q, (newQuery) => {
@@ -78,7 +79,8 @@ const userName = computed(() => authStore.user?.name)
 
 const logout = () => {
   authStore.logout()
-  router.push({name: 'home'})
+  modalStore.hideLogin()
+  router.push({ name: 'home' })
 }
 
 let debounceTimeout: ReturnType<typeof setTimeout>
