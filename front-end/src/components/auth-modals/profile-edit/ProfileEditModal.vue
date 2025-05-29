@@ -57,32 +57,10 @@
             <p class="text-sm text-zinc-400 mb-2">Esta ação não pode ser desfeita.</p>
             <button
                 type="button"
-                @click="handleDelete"
-                :disabled="isDeleting"
+                @click="showConfirmModal = true"
                 class="text-sm px-4 py-2 rounded bg-red-600 hover:bg-red-700 cursor-pointer text-white flex items-center justify-center"
             >
-              <svg
-                  v-if="isDeleting"
-                  class="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-              >
-                <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                />
-                <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z"
-                />
-              </svg>
-              <span>{{ isDeleting ? 'Excluindo...' : '🗑️ Excluir Conta' }}</span>
+              🗑️ Excluir Conta
             </button>
           </div>
         </div>
@@ -108,34 +86,34 @@
                 fill="none"
                 viewBox="0 0 24 24"
             >
-              <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-              />
-              <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z"
-              />
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z" />
             </svg>
             <span>{{ isSubmitting ? 'Salvando...' : 'Salvar Alterações' }}</span>
           </button>
         </div>
       </form>
     </div>
+
+    <ConfirmDeleteModal
+        v-if="showConfirmModal"
+        :loading="isDeleting"
+        @cancel="showConfirmModal = false"
+        @confirm="handleDelete"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
+import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
 
 const emit = defineEmits(['close'])
 const { user, updateUser, deleteUser } = useAuth()
+const router = useRouter()
 
 const form = ref({
   name: user.value?.name || '',
@@ -147,6 +125,7 @@ const form = ref({
 const errorMessage = ref('')
 const isSubmitting = ref(false)
 const isDeleting = ref(false)
+const showConfirmModal = ref(false)
 
 const clearError = () => {
   errorMessage.value = ''
@@ -186,13 +165,15 @@ const submit = async () => {
 }
 
 const handleDelete = async () => {
-  const confirmed = confirm('Tem certeza que deseja excluir sua conta? Essa ação é irreversível.')
-  if (!confirmed) return
-
+  showConfirmModal.value = false
   isDeleting.value = true
+
   const { success } = await deleteUser()
   isDeleting.value = false
 
-  if (success) emit('close')
+  if (success) {
+    emit('close')
+    router.push({ name: 'home' })
+  }
 }
 </script>
