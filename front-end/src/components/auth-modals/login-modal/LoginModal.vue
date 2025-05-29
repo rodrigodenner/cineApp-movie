@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 
 const emit = defineEmits(['close', 'switch-to-register'])
+
 const router = useRouter()
+const route = useRoute()
 const email = ref('')
 const password = ref('')
 const errorMessage = ref<string | undefined>()
-
 
 const { loginUser } = useAuth()
 
@@ -18,14 +19,17 @@ const handleLogin = async () => {
   const { success, error } = await loginUser(email.value, password.value)
 
   if (!success) {
-    errorMessage.value  = error
+    errorMessage.value = error
     return
   }
-
   emit('close')
-  router.push({ name: 'profile' })
+
+  if (route.name !== 'movie-detail') {
+    router.push({ name: 'profile' })
+  }
 }
 </script>
+
 
 
 
