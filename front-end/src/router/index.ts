@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
-import { useAuthStore } from '@/stores/auth'
+import {useAuthStore} from '@/stores/auth'
 
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type {NavigationGuardNext, RouteLocationNormalized} from 'vue-router'
 
 const requireAuth = (
     to: RouteLocationNormalized,
@@ -11,7 +11,7 @@ const requireAuth = (
 ) => {
   const authStore = useAuthStore()
   if (!authStore.isAuthenticated) {
-    return next({ name: 'home' })
+    return next({name: 'home'})
   }
   next()
 }

@@ -13,7 +13,7 @@
       <div v-if="isSearchLoading" class="text-white">Carregando...</div>
 
       <div v-else-if="searchMovies.length">
-        <MovieGrid :movies="searchMovies" title="Filmes encontrados" />
+        <MovieGrid :movies="searchMovies" title="Filmes encontrados"/>
       </div>
 
       <div v-else class="text-zinc-400 text-sm">
@@ -22,8 +22,8 @@
     </template>
 
     <template v-else>
-      <HeroBanner />
-      <GenreFilter @select="handleGenreSelect" />
+      <HeroBanner/>
+      <GenreFilter @select="handleGenreSelect"/>
 
       <MovieSection
           v-if="!isTrendingLoading && !isGenreSelected"
@@ -31,7 +31,7 @@
           :movies="nowPlaying"
       />
 
-      <SpinnerLoading v-if="isTrendingLoading && !isGenreSelected" />
+      <SpinnerLoading v-if="isTrendingLoading && !isGenreSelected"/>
 
       <MovieGrid
           v-if="!isGenreSelected && trendingMovies.length"
@@ -57,20 +57,19 @@
     </template>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, computed, onMounted, watch} from 'vue'
+import {useRoute} from 'vue-router'
 import HeroBanner from '@/components/hero-banner/HeroBanner.vue'
 import GenreFilter from '@/components/genre-filter/GenreFilter.vue'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 import SpinnerLoading from '@/components/spinner-loading/SpinnerLoading.vue'
 import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
-import { useNowPlaying } from '@/composables/useNowPlaying'
-import { useTrendingMovies } from '@/composables/useTrendingMovies'
-import { usePopularMovies } from '@/composables/usePopularMovies'
-import { useGenreMovies } from '@/composables/useGenreMovie'
-import { useSearchMovies } from '@/composables/useSearchMovies'
+import {useNowPlaying} from '@/composables/useNowPlaying'
+import {useTrendingMovies} from '@/composables/useTrendingMovies'
+import {usePopularMovies} from '@/composables/usePopularMovies'
+import {useGenreMovies} from '@/composables/useGenreMovie'
+import {useSearchMovies} from '@/composables/useSearchMovies'
 
 const route = useRoute()
 const hasGlobalError = ref(false)
@@ -79,22 +78,26 @@ const handleGlobalError = () => {
   hasGlobalError.value = true
 }
 
-const { movies: nowPlaying } = useNowPlaying({ onError: handleGlobalError })
-const { trendingMovies, isTrendingLoading, fetchTrending } = useTrendingMovies({ onError: handleGlobalError })
-const { movies: popularMovies, isLoading: isPopularLoading, fetchPopular } = usePopularMovies({ onError: handleGlobalError })
+const {movies: nowPlaying} = useNowPlaying({onError: handleGlobalError})
+const {trendingMovies, isTrendingLoading, fetchTrending} = useTrendingMovies({onError: handleGlobalError})
+const {
+  movies: popularMovies,
+  isLoading: isPopularLoading,
+  fetchPopular
+} = usePopularMovies({onError: handleGlobalError})
 
 const {
   selectedGenres,
   movies: genreMovies,
   loading: isGenreLoading,
   fetchMoviesByGenres
-} = useGenreMovies({ onError: handleGlobalError })
+} = useGenreMovies({onError: handleGlobalError})
 
 const {
   movies: searchMovies,
   loading: isSearchLoading,
   fetchSearchResults
-} = useSearchMovies({ onError: handleGlobalError })
+} = useSearchMovies({onError: handleGlobalError})
 
 const isGenreSelected = computed(() => selectedGenres.value.length > 0)
 const searchQuery = computed(() => route.query.q as string)

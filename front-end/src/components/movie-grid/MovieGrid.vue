@@ -41,9 +41,8 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import {ref, computed, watch} from 'vue'
 import MovieCard from '@/components/movie-card/MovieCard.vue'
 
 const props = defineProps<{

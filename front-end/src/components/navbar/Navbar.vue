@@ -80,7 +80,7 @@ const userName = computed(() => authStore.user?.name)
 const logout = () => {
   authStore.logout()
   modalStore.hideLogin()
-  router.push({ name: 'home' })
+  router.push({name: 'home'})
 }
 
 let debounceTimeout: ReturnType<typeof setTimeout>

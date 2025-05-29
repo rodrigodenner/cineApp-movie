@@ -1,5 +1,5 @@
-import { ref, onMounted } from 'vue'
-import { getPopularMovies } from '@/services/movieService'
+import {ref, onMounted} from 'vue'
+import {getPopularMovies} from '@/services/movieService'
 
 export function usePopularMovies(options?: { onError?: () => void }) {
   const movies = ref<any[]>([])

@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { getMoviesByGenre } from '@/services/movieService'
+import {ref} from 'vue'
+import {getMoviesByGenre} from '@/services/movieService'
 
 export function useGenreMovies(options?: { onError?: () => void }) {
   const selectedGenres = ref<number[]>([])

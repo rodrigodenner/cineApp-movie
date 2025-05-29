@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
-import { useAuthStore } from '@/stores/auth'
+import {useAuthStore} from '@/stores/auth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -27,7 +27,7 @@ api.interceptors.response.use(
 )
 
 export const login = async (email: string, password: string) => {
-  return api.post('/auth/login', { email, password })
+  return api.post('/auth/login', {email, password})
 }
 
 export const register = async (payload: {
@@ -39,7 +39,12 @@ export const register = async (payload: {
   return api.post('/auth/register', payload)
 }
 
-export const updateUser = async (payload: { name: string; password?: string; new_password?: string; new_password_confirmation?: string }) => {
+export const updateUser = async (payload: {
+  name: string;
+  password?: string;
+  new_password?: string;
+  new_password_confirmation?: string
+}) => {
   return api.put('/auth/user', payload)
 }
 

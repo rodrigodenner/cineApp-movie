@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { getMoviesByGenre } from '@/services/movieService'
+import {ref} from 'vue'
+import {getMoviesByGenre} from '@/services/movieService'
 
 export function useRelatedMovies() {
   const relatedMovies = ref<any[]>([])

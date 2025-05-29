@@ -86,9 +86,9 @@
                 fill="none"
                 viewBox="0 0 24 24"
             >
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
               <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z" />
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z"/>
             </svg>
             <span>{{ isSubmitting ? 'Salvando...' : 'Salvar Alterações' }}</span>
           </button>
@@ -104,15 +104,14 @@
     />
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
+import {ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {useAuth} from '@/composables/useAuth'
 import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
 
 const emit = defineEmits(['close'])
-const { user, updateUser, deleteUser } = useAuth()
+const {user, updateUser, deleteUser} = useAuth()
 const router = useRouter()
 
 const form = ref({
@@ -158,7 +157,7 @@ const submit = async () => {
     new_password_confirmation: hasPassword ? form.value.new_password_confirmation : undefined,
   }
 
-  const { success } = await updateUser(payload)
+  const {success} = await updateUser(payload)
   isSubmitting.value = false
 
   if (success) emit('close')
@@ -168,12 +167,12 @@ const handleDelete = async () => {
   showConfirmModal.value = false
   isDeleting.value = true
 
-  const { success } = await deleteUser()
+  const {success} = await deleteUser()
   isDeleting.value = false
 
   if (success) {
     emit('close')
-    router.push({ name: 'home' })
+    router.push({name: 'home'})
   }
 }
 </script>

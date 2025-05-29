@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { favoriteMovie, unfavoriteMovie, getFavoriteMovies } from '@/services/movieService'
+import {ref} from 'vue'
+import {favoriteMovie, unfavoriteMovie, getFavoriteMovies} from '@/services/movieService'
 
 export function useMovieFavorite() {
   const isFavorite = ref(false)

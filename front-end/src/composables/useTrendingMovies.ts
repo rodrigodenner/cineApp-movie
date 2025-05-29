@@ -1,5 +1,5 @@
-import { ref, onMounted } from 'vue'
-import { getTrending } from '@/services/movieService'
+import {ref, onMounted} from 'vue'
+import {getTrending} from '@/services/movieService'
 
 export function useTrendingMovies(options?: { onError?: () => void }) {
   const trendingMovies = ref<any[]>([])

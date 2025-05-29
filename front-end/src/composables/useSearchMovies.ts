@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { getMoviesBySearch } from '@/services/movieService'
+import {ref} from 'vue'
+import {getMoviesBySearch} from '@/services/movieService'
 
 export const useSearchMovies = (options?: { onError?: () => void }) => {
   const movies = ref<any[]>([])

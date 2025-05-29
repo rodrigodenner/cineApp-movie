@@ -27,7 +27,7 @@ export const getMoviesBySearch = async (query: string, page = 1) => {
 
 
 export const favoriteMovie = async (tmdbId: number) => {
-  return api.post('/movies/favorite', { tmdb_id: tmdbId })
+  return api.post('/movies/favorite', {tmdb_id: tmdbId})
 }
 
 export const unfavoriteMovie = async (tmdbId: number) => {

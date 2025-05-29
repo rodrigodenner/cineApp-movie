@@ -1,3 +1,23 @@
+<template>
+  <div>
+    <button @click="modalStore.showLogin()"
+            class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded cursor-pointer">
+      Entrar
+    </button>
+
+    <LoginModal
+        v-if="modalStore.loginVisible"
+        @close="modalStore.hideLogin"
+        @switch-to-register="switchToRegister"
+    />
+
+    <RegisterModal
+        v-if="showRegister"
+        @close="showRegister = false"
+        @switch-to-login="switchToLogin"
+    />
+  </div>
+</template>
 <script setup lang="ts">
 
 import LoginModal from "@/components/auth-modals/login-modal/LoginModal.vue"
@@ -19,23 +39,3 @@ const switchToLogin = () => {
 }
 </script>
 
-<template>
-  <div>
-    <button @click="modalStore.showLogin()"
-            class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded cursor-pointer">
-      Entrar
-    </button>
-
-    <LoginModal
-        v-if="modalStore.loginVisible"
-        @close="modalStore.hideLogin"
-        @switch-to-register="switchToRegister"
-    />
-
-    <RegisterModal
-        v-if="showRegister"
-        @close="showRegister = false"
-        @switch-to-login="switchToLogin"
-    />
-  </div>
-</template>

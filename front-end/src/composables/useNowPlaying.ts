@@ -1,5 +1,5 @@
-import { ref, onMounted } from 'vue'
-import { getNowPlaying } from '@/services/movieService'
+import {ref, onMounted} from 'vue'
+import {getNowPlaying} from '@/services/movieService'
 
 export const useNowPlaying = (options?: { onError?: () => void }) => {
   const movies = ref([])

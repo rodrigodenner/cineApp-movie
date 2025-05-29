@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="flex justify-center items-center py-8 text-red-500">
     <svg class="animate-spin h-6 w-6" viewBox="0 0 24 24">
@@ -11,4 +7,7 @@
     <span class="ml-2 font-semibold">Carregando os melhores filmes...</span>
   </div>
 </template>
+<script setup lang="ts">
+
+</script>
 

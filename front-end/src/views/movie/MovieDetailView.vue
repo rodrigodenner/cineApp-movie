@@ -57,17 +57,16 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 pb-20" v-if="relatedMovies.length">
-      <MovieSection title="🎥 Filmes Relacionados" :movies="relatedMovies" />
+      <MovieSection title="🎥 Filmes Relacionados" :movies="relatedMovies"/>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted, computed,watch} from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { getMovieDetails } from '@/services/movieService'
-import { useMovieFavorite } from '@/composables/useMovieFavorite'
-import { useRelatedMovies } from '@/composables/useRelatedMovies'
+import {ref, onMounted, computed, watch} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {getMovieDetails} from '@/services/movieService'
+import {useMovieFavorite} from '@/composables/useMovieFavorite'
+import {useRelatedMovies} from '@/composables/useRelatedMovies'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 import {useAuthStore} from "@/stores/auth.ts";
 import {useModalStore} from "@/stores/useModalStore.ts";
@@ -79,8 +78,8 @@ const authStore = useAuthStore()
 const modalStore = useModalStore()
 const movie = ref<any>(null)
 
-const { isFavorite, isLoading, toggleFavorite, checkIfFavorite } = useMovieFavorite()
-const { relatedMovies, fetchRelatedMovies } = useRelatedMovies()
+const {isFavorite, isLoading, toggleFavorite, checkIfFavorite} = useMovieFavorite()
+const {relatedMovies, fetchRelatedMovies} = useRelatedMovies()
 
 const releaseYear = computed(() =>
     movie.value?.release_date

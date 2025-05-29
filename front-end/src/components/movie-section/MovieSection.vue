@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import {ref, onMounted} from 'vue'
 import EmblaCarousel from 'embla-carousel'
 import MovieCard from '@/components/movie-card/MovieCard.vue'
 
@@ -56,7 +56,7 @@ onMounted(() => {
               lg:flex-[0_0_16.6667%]
               xl:flex-[0_0_12.5%]"
           >
-            <MovieCard :movie="movie" />
+            <MovieCard :movie="movie"/>
           </div>
 
         </div>
