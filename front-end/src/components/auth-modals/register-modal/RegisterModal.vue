@@ -1,39 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useRegister } from '@/composables/useRegister'
-
-const emit = defineEmits(['close', 'switch-to-login'])
-const router = useRouter()
-
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const password_confirmation = ref('')
-const errorMessage = ref<string | undefined>()
-
-const { registerUser } = useRegister()
-
-const handleRegister = async () => {
-  errorMessage.value = ''
-
-  const { success, error } = await registerUser(
-      name.value,
-      email.value,
-      password.value,
-      password_confirmation.value
-  )
-
-  if (!success) {
-    errorMessage.value = error
-    return
-  }
-
-  emit('close')
-  router.push({ name: 'profile' })
-}
-</script>
-
 <template>
   <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
     <div class="bg-zinc-900 p-6 rounded-xl w-full max-w-md border border-zinc-800 relative">
@@ -66,8 +30,33 @@ const handleRegister = async () => {
           <input v-model="password_confirmation" type="password" placeholder="******"
                  class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
         </div>
-        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded cursor-pointer">
-          Criar Conta
+        <button
+            type="submit"
+            :disabled="isSubmitting"
+            class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded cursor-pointer flex justify-center items-center"
+        >
+          <svg
+              v-if="isSubmitting"
+              class="animate-spin h-5 w-5 mr-2 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+          >
+            <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+            ></circle>
+            <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3 3 3H4z"
+            ></path>
+          </svg>
+          <span>{{ isSubmitting ? 'Criando Conta...' : 'Criar Conta' }}</span>
         </button>
       </form>
       <p class="text-center text-sm text-zinc-400 mt-4">
@@ -79,3 +68,42 @@ const handleRegister = async () => {
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useRegister } from '@/composables/useRegister'
+
+const emit = defineEmits(['close', 'switch-to-login'])
+const router = useRouter()
+
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const password_confirmation = ref('')
+const errorMessage = ref<string | undefined>()
+const isSubmitting = ref(false)
+
+const { registerUser } = useRegister()
+
+const handleRegister = async () => {
+  errorMessage.value = ''
+  isSubmitting.value = true
+
+  const { success, error } = await registerUser(
+      name.value,
+      email.value,
+      password.value,
+      password_confirmation.value
+  )
+
+  isSubmitting.value = false
+
+  if (!success) {
+    errorMessage.value = error
+    return
+  }
+
+  emit('close')
+  router.push({ name: 'profile' })
+}
+</script>
