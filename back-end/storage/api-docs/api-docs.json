@@ -265,6 +265,148 @@
                 ]
             }
         },
+        "/api/movies/{id}": {
+            "get": {
+                "tags": [
+                    "Movies"
+                ],
+                "summary": "Detalhes de um filme",
+                "operationId": "0665e4e5eeb4738291d9733b6015218b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do filme no TMDB",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 550
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do filme",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 550
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Fight Club"
+                                        },
+                                        "poster_path": {
+                                            "type": "string",
+                                            "example": "https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"
+                                        },
+                                        "genres": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 18
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Drama"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "overview": {
+                                            "type": "string",
+                                            "example": "Um homem insatisfeito com sua vida conhece Tyler..."
+                                        },
+                                        "release_date": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "1999-10-15"
+                                        },
+                                        "vote_average": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 8.4
+                                        },
+                                        "trailer_url": {
+                                            "type": "string",
+                                            "example": "https://www.youtube.com/watch?v=SUXWAEX2jlg",
+                                            "nullable": true
+                                        },
+                                        "runtime": {
+                                            "type": "integer",
+                                            "example": 139,
+                                            "nullable": true
+                                        },
+                                        "original_language": {
+                                            "type": "string",
+                                            "example": "en",
+                                            "nullable": true
+                                        },
+                                        "budget": {
+                                            "type": "integer",
+                                            "example": 63000000,
+                                            "nullable": true
+                                        },
+                                        "revenue": {
+                                            "type": "integer",
+                                            "example": 100853753,
+                                            "nullable": true
+                                        },
+                                        "production_companies": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 508
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Regency Enterprises"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "production_countries": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "iso_3166_1": {
+                                                        "type": "string",
+                                                        "example": "US"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "United States of America"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Filme não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/api/movies/popular": {
             "get": {
                 "tags": [
@@ -753,53 +895,6 @@
                     "overview": {
                         "type": "string",
                         "example": "Um homem insatisfeito com sua vida conhece Tyler..."
-                    },
-                    "vote_average": {
-                        "type": "number",
-                        "format": "float",
-                        "example": 8.4
-                    }
-                },
-                "type": "object"
-            },
-            "MovieDetail": {
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 550
-                    },
-                    "title": {
-                        "type": "string",
-                        "example": "Fight Club"
-                    },
-                    "poster_path": {
-                        "type": "string",
-                        "example": "https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"
-                    },
-                    "genres": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "id": {
-                                    "type": "integer",
-                                    "example": 18
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": "Drama"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    },
-                    "overview": {
-                        "type": "string",
-                        "example": "Um homem insatisfeito com sua vida conhece Tyler..."
-                    },
-                    "release_date": {
-                        "type": "string",
-                        "format": "date",
-                        "example": "1999-10-15"
                     },
                     "vote_average": {
                         "type": "number",

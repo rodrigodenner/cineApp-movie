@@ -87,24 +87,52 @@ class MovieController extends Controller
 
 
     /**
-     * @OA\Schema(
-     *     schema="MovieDetail",
-     *     type="object",
-     *     @OA\Property(property="id", type="integer", example=550),
-     *     @OA\Property(property="title", type="string", example="Fight Club"),
-     *     @OA\Property(property="poster_path", type="string", example="https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"),
-     *     @OA\Property(
-     *         property="genres",
-     *         type="array",
-     *         @OA\Items(
+     * @OA\Get(
+     *     path="/api/movies/{id}",
+     *     tags={"Movies"},
+     *     summary="Detalhes de um filme",
+     *     security={{"Bearer":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do filme no TMDB",
+     *         @OA\Schema(type="integer", example=550)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Detalhes do filme",
+     *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="id", type="integer", example=18),
-     *             @OA\Property(property="name", type="string", example="Drama")
+     *             @OA\Property(property="id", type="integer", example=550),
+     *             @OA\Property(property="title", type="string", example="Fight Club"),
+     *             @OA\Property(property="poster_path", type="string", example="https://image.tmdb.org/t/p/w500/a26cQPRhJPX6GbWfQbvZdrrp9j9.jpg"),
+     *             @OA\Property(property="genres", type="array", @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=18),
+     *                 @OA\Property(property="name", type="string", example="Drama")
+     *             )),
+     *             @OA\Property(property="overview", type="string", example="Um homem insatisfeito com sua vida conhece Tyler..."),
+     *             @OA\Property(property="release_date", type="string", format="date", example="1999-10-15"),
+     *             @OA\Property(property="vote_average", type="number", format="float", example=8.4),
+     *             @OA\Property(property="trailer_url", type="string", nullable=true, example="https://www.youtube.com/watch?v=SUXWAEX2jlg"),
+     *             @OA\Property(property="runtime", type="integer", nullable=true, example=139),
+     *             @OA\Property(property="original_language", type="string", nullable=true, example="en"),
+     *             @OA\Property(property="budget", type="integer", nullable=true, example=63000000),
+     *             @OA\Property(property="revenue", type="integer", nullable=true, example=100853753),
+     *             @OA\Property(property="production_companies", type="array", @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=508),
+     *                 @OA\Property(property="name", type="string", example="Regency Enterprises")
+     *             )),
+     *             @OA\Property(property="production_countries", type="array", @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="iso_3166_1", type="string", example="US"),
+     *                 @OA\Property(property="name", type="string", example="United States of America")
+     *             ))
      *         )
      *     ),
-     *     @OA\Property(property="overview", type="string", example="Um homem insatisfeito com sua vida conhece Tyler..."),
-     *     @OA\Property(property="release_date", type="string", format="date", example="1999-10-15"),
-     *     @OA\Property(property="vote_average", type="number", format="float", example=8.4)
+     *     @OA\Response(response=404, description="Filme não encontrado")
      * )
      */
     public function show(int $id, GetMovieDetailsService $service)
