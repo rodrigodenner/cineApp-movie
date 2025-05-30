@@ -32,6 +32,11 @@ const routes = [
     path: '/movies/:id',
     name: 'movie-detail',
     component: () => import('@/views/movie/MovieDetailView.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/errors/NotFoundView.vue'),
   }
 
 ]
