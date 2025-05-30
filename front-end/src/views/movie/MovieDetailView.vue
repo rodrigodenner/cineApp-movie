@@ -56,6 +56,11 @@
       </div>
     </div>
 
+    <MovieProductionDetails :movie="movie" />
+
+    <div class="max-w-7xl mx-auto px-4 pb-20" v-if="relatedMovies.length">
+      <MovieTrailer v-if="movie?.trailer_url" :trailer-url="movie.trailer_url" />
+    </div>
     <div class="max-w-7xl mx-auto px-4 pb-20" v-if="relatedMovies.length">
       <MovieSection title="🎥 Filmes Relacionados" :movies="relatedMovies"/>
     </div>
@@ -70,6 +75,8 @@ import {useRelatedMovies} from '@/composables/useRelatedMovies'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 import {useAuthStore} from "@/stores/auth.ts";
 import {useModalStore} from "@/stores/useModalStore.ts";
+import MovieTrailer from "@/components/movie-detail/MovieTrailer.vue";
+import MovieProductionDetails from "@/components/movie-detail/MovieProductionDetails.vue";
 
 
 const route = useRoute()
