@@ -19,6 +19,13 @@ class MovieDetailResource extends JsonResource
             'overview'     => $this['overview'],
             'release_date' => $this['release_date'],
             'vote_average' => $this['vote_average'],
+            'trailer_url'  => $this['trailer_url'] ?? null,
+            'runtime'               => $this['runtime'] ?? null,
+            'original_language'     => $this['original_language'] ?? null,
+            'budget'                => $this['budget'] ?? null,
+            'revenue'               => $this['revenue'] ?? null,
+            'production_companies'  => $this['production_companies'] ?? [],
+            'production_countries'  => $this['production_countries'] ?? [],
         ];
     }
 }
