@@ -20,7 +20,7 @@
           :key="genre.id"
           @click="handleSelect(genre.id)"
           :class="[
-          'px-4 py-1 rounded-full transition-colors duration-200',
+          'px-4 py-1 rounded-full transition-colors duration-200 cursor-pointer',
           selectedGenres.includes(genre.id)
             ? 'bg-red-500 text-white'
             : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'

@@ -1,60 +1,18 @@
 <template>
-  <div class="min-h-screen bg-zinc-900 text-white">
-    <div
-        class="relative w-full h-[500px] bg-cover bg-center"
-        :style="`background-image: url(${movie?.poster_path})`"
-    >
-      <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 to-transparent"></div>
-      <button
-          @click="router.back()"
-          class="absolute top-24 left-4 text-lg font-bold text-red-500 bg-zinc-800/70 px-3 py-1 rounded-full hover:bg-zinc-700 transition cursor-pointer"
-      >
-        ← Voltar
-      </button>
-    </div>
+  <div v-if="movie" class="min-h-screen bg-zinc-900 text-white">
+    <MovieBanner :poster="movie?.poster_path" :onBack="router.back" />
 
-    <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10">
-      <img
-          :src="movie?.poster_path"
-          :alt="movie?.title"
-          class="w-52 h-72 rounded-xl object-cover shadow-lg"
-      />
-
-      <div class="flex-1">
-        <h1 class="text-4xl font-bold mb-3">{{ movie?.title }}</h1>
-
-        <div class="flex items-center gap-4 text-zinc-400 text-sm mb-4">
-          <span>⭐ <strong class="text-white">{{ movie?.vote_average?.toFixed(1) }}</strong> /10</span>
-          <span>📅 {{ releaseYear }}</span>
-          <span>⏱️ 120 min</span>
-        </div>
-
-        <div class="flex gap-2 flex-wrap mb-6">
-          <span
-              v-for="genre in movie?.genres"
-              :key="genre.id"
-              class="bg-red-800 text-white px-3 py-1 rounded-full text-sm"
-          >
-            {{ genre.name }}
-          </span>
-        </div>
-
-        <h2 class="text-xl font-semibold mb-2">Sinopse</h2>
-        <p class="text-zinc-300 mb-6">
-          {{ movie?.overview }}
-        </p>
-
-        <button
-            @click="handleFavoriteClick"
-            :disabled="isLoading"
-            class="border border-white text-white rounded px-5 py-2 flex items-center gap-2 hover:bg-red-800 cursor-pointer hover:text-white transition"
-        >
-          <span v-if="isFavorite"><span class="mr-2">❤️</span> Remover dos Favoritos</span>
-          <span v-else><span class="mr-2">🤍</span> Adicionar aos Favoritos</span>
-        </button>
-
-      </div>
-    </div>
+    <MovieHeaderInfo
+        :poster="movie?.poster_path"
+        :title="movie.title"
+        :vote="movie.vote_average"
+        :releaseYear="releaseYear"
+        :genres="movie.genres"
+        :overview="movie.overview"
+        :isFavorite="isFavorite"
+        :isLoading="isLoading"
+        :onToggleFavorite="handleFavoriteClick"
+    />
 
     <MovieProductionDetails :movie="movie" />
 
@@ -64,6 +22,7 @@
     <div class="max-w-7xl mx-auto px-4 pb-20" v-if="relatedMovies.length">
       <MovieSection title="🎥 Filmes Relacionados" :movies="relatedMovies"/>
     </div>
+
   </div>
 </template>
 <script setup lang="ts">
@@ -77,6 +36,8 @@ import {useAuthStore} from "@/stores/auth.ts";
 import {useModalStore} from "@/stores/useModalStore.ts";
 import MovieTrailer from "@/components/movie-detail/MovieTrailer.vue";
 import MovieProductionDetails from "@/components/movie-detail/MovieProductionDetails.vue";
+import MovieBanner from "@/components/movie-detail/MovieBanner.vue";
+import MovieHeaderInfo from "@/components/movie-detail/MovieHeaderInfo.vue";
 
 
 const route = useRoute()
