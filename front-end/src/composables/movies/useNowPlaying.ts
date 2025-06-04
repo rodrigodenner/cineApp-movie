@@ -1,8 +1,10 @@
-import {ref, onMounted} from 'vue'
-import {getNowPlaying} from '@/services/movieService'
+import { ref, onMounted } from 'vue'
+import { handleError } from '@/utils/handleError'
+import type { Movie } from '@/types/Movie'
+import { getNowPlaying } from '@/services/movies/getNowPlaying'
 
 export const useNowPlaying = (options?: { onError?: () => void }) => {
-  const movies = ref([])
+  const movies = ref<Movie[]>([])
   const loading = ref(true)
   const error = ref('')
 
@@ -11,7 +13,7 @@ export const useNowPlaying = (options?: { onError?: () => void }) => {
       const response = await getNowPlaying()
       movies.value = response.data.data
     } catch (err: any) {
-      error.value = err?.response?.data?.message || 'Erro ao carregar filmes em cartaz.'
+      error.value = handleError(err, 'Erro ao carregar filmes em cartaz.')
       options?.onError?.()
     } finally {
       loading.value = false

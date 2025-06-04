@@ -13,7 +13,7 @@
       <div v-if="isSearchLoading" class="text-white">Carregando...</div>
 
       <div v-else-if="searchMovies.length">
-        <MovieGrid :movies="searchMovies" title="Filmes encontrados"/>
+        <MovieGrid :movies="searchMovies" title="Filmes encontrados" />
       </div>
 
       <div v-else class="text-zinc-400 text-sm">
@@ -25,11 +25,13 @@
 
 <script setup lang="ts">
 import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
+import type {Movie} from "@/types/Movie.ts";
 
-const props = defineProps<{
+
+defineProps<{
   hasGlobalError: boolean
   searchQuery: string | null
   isSearchLoading: boolean
-  searchMovies: any[]
+  searchMovies: Movie[]
 }>()
 </script>

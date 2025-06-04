@@ -1,20 +1,23 @@
-import {ref} from 'vue'
-import {getMoviesByGenre} from '@/services/movieService'
+import { ref } from 'vue'
+import { getMoviesByGenre } from '@/services/movies/getByGenre'
+import { handleError } from '@/utils/handleError'
+import type {Movie} from "@/types/Movie.ts";
+
 
 export function useRelatedMovies() {
-  const relatedMovies = ref<any[]>([])
+  const relatedMovies = ref<Movie[]>([])
   const isLoading = ref(false)
 
   const fetchRelatedMovies = async (movieId: number, genreIds: number[], limit = 16) => {
     isLoading.value = true
-    const relatedSet = new Map<number, any>()
+    const relatedSet = new Map<number, Movie>()
 
     for (const genreId of genreIds) {
       if (relatedSet.size >= limit) break
 
       try {
         const res = await getMoviesByGenre(genreId)
-        const filtered = res.data.data.filter((m: any) => m.id !== movieId)
+        const filtered = (res.data.data as Movie[]).filter((m) => m.id !== movieId)
 
         for (const item of filtered) {
           if (!relatedSet.has(item.id)) {
@@ -23,7 +26,7 @@ export function useRelatedMovies() {
           }
         }
       } catch (err) {
-        console.warn(`Erro ao buscar filmes para o gênero ${genreId}:`, err)
+        handleError(err, `Erro ao buscar filmes do gênero ${genreId}`)
       }
     }
 

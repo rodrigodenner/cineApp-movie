@@ -1,8 +1,12 @@
-import {ref} from 'vue'
-import {getMoviesBySearch} from '@/services/movieService'
+// src/composables/movies/useSearchMovies.ts
+
+import { ref } from 'vue'
+import { getMoviesBySearch } from '@/services/movies/search'
+import { handleError } from '@/utils/handleError'
+import type { Movie } from '@/types/Movie'
 
 export const useSearchMovies = (options?: { onError?: () => void }) => {
-  const movies = ref<any[]>([])
+  const movies = ref<Movie[]>([])
   const loading = ref(false)
   const page = ref(1)
   const hasMore = ref(true)
@@ -20,14 +24,18 @@ export const useSearchMovies = (options?: { onError?: () => void }) => {
 
     try {
       const response = await getMoviesBySearch(query, page.value)
-      const data = response.data.data
+
+      const data = response.data.data.map((movie: any) => ({
+        ...movie,
+        id: movie.id ?? movie.tmdb_id, // garante que sempre haja um `id` para navegação
+      })) as Movie[]
 
       if (data.length === 0) hasMore.value = false
 
       movies.value.push(...data)
       page.value++
     } catch (e) {
-      console.error('Erro ao buscar filmes:', e)
+      handleError(e, 'Erro ao buscar filmes')
       options?.onError?.()
     } finally {
       loading.value = false
@@ -38,6 +46,6 @@ export const useSearchMovies = (options?: { onError?: () => void }) => {
     movies,
     loading,
     fetchSearchResults,
-    hasMore
+    hasMore,
   }
 }

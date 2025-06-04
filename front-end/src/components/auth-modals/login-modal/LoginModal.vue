@@ -14,13 +14,21 @@
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1 text-white">Email</label>
-          <input v-model="email" type="email" placeholder="seu@email.com"
-                 class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"/>
+          <input
+              v-model="email"
+              type="email"
+              placeholder="seu@email.com"
+              class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          />
         </div>
         <div class="mb-6">
           <label class="block text-sm font-medium mb-1 text-white">Senha</label>
-          <input v-model="password" type="password" placeholder="******"
-                 class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"/>
+          <input
+              v-model="password"
+              type="password"
+              placeholder="******"
+              class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          />
         </div>
         <button
             type="submit"
@@ -60,10 +68,11 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import {ref} from 'vue'
-import {useRouter, useRoute} from 'vue-router'
-import {useAuth} from '@/composables/useAuth'
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuth } from '@/composables/auth/useAuth.ts'
 
 const emit = defineEmits(['close', 'switch-to-register'])
 
@@ -71,28 +80,28 @@ const router = useRouter()
 const route = useRoute()
 const email = ref('')
 const password = ref('')
-const errorMessage = ref<string | undefined>()
+const errorMessage = ref<string | null>(null)
 const isSubmitting = ref(false)
 
-const {loginUser} = useAuth()
+const { loginUser } = useAuth()
 
 const handleLogin = async () => {
-  errorMessage.value = ''
+  errorMessage.value = null
   isSubmitting.value = true
 
-  const {success, error} = await loginUser(email.value, password.value)
+  const { success, error } = await loginUser(email.value, password.value)
 
   isSubmitting.value = false
 
   if (!success) {
-    errorMessage.value = error
+    errorMessage.value = error || 'Erro desconhecido'
     return
   }
 
   emit('close')
 
   if (route.name !== 'movie-detail') {
-    router.push({name: 'profile'})
+    router.push({ name: 'profile' })
   }
 }
 </script>

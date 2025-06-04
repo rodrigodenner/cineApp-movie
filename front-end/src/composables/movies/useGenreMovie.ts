@@ -1,9 +1,12 @@
-import {ref} from 'vue'
-import {getMoviesByGenre} from '@/services/movieService'
+import { ref } from 'vue'
+import { getMoviesByGenre } from '@/services/movies/getByGenre'
+import { handleError } from '@/utils/handleError'
+import type {Movie} from "@/types/Movie.ts";
+
 
 export function useGenreMovies(options?: { onError?: () => void }) {
   const selectedGenres = ref<number[]>([])
-  const movies = ref<any[]>([])
+  const movies = ref<Movie[]>([])
   const loading = ref(false)
 
   const fetchMoviesByGenres = async (genreIds: number[]) => {
@@ -21,15 +24,14 @@ export function useGenreMovies(options?: { onError?: () => void }) {
     try {
       const promises = genreIds.map((id) => getMoviesByGenre(id))
       const results = await Promise.all(promises)
-
-      const combined = results.flatMap(res => res.data.data)
+      const combined = results.flatMap((res) => res.data.data as Movie[])
 
       movies.value = combined.filter(
           (movie, index, self) =>
               self.findIndex((m) => m.id === movie.id) === index
       )
     } catch (error) {
-      console.error('Erro ao buscar filmes por múltiplos gêneros:', error)
+      handleError(error, 'Erro ao buscar filmes por múltiplos gêneros')
       options?.onError?.()
     } finally {
       loading.value = false

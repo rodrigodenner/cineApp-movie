@@ -54,33 +54,35 @@
   </nav>
 </template>
 <script setup lang="ts">
-import {ref, computed, onMounted, watch} from 'vue'
-import {useRouter, useRoute} from 'vue-router'
-import {useAuthStore} from '@/stores/auth'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useModalStore } from '@/stores/useModalStore'
 import AuthModals from '@/components/auth-modals/Index.vue'
-import {useModalStore} from "@/stores/useModalStore.ts";
 
 const router = useRouter()
 const route = useRoute()
+
 const authStore = useAuthStore()
 const modalStore = useModalStore()
-const search = ref(route.query.q?.toString() || '')
 
-watch(() => route.query.q, (newQuery) => {
-  search.value = newQuery?.toString() || ''
-})
+const search = ref<string>(route.query.q?.toString() || '')
 
 onMounted(() => {
   authStore.loadFromStorage()
 })
 
+watch(() => route.query.q, (newQuery) => {
+  search.value = newQuery?.toString() || ''
+})
+
 const isLoggedIn = computed(() => authStore.isAuthenticated)
-const userName = computed(() => authStore.user?.name)
+const userName = computed(() => authStore.user?.name || '')
 
 const logout = () => {
   authStore.logout()
   modalStore.hideLogin()
-  router.push({name: 'home'})
+  router.push({ name: 'home' })
 }
 
 let debounceTimeout: ReturnType<typeof setTimeout>
@@ -89,13 +91,13 @@ watch(search, (newValue) => {
   debounceTimeout = setTimeout(() => {
     router.push({
       name: 'home',
-      query: newValue.trim() ? {q: newValue.trim()} : {}
+      query: newValue.trim() ? { q: newValue.trim() } : {}
     })
   }, 500)
 })
 
 const clearSearch = () => {
   search.value = ''
-  router.push({name: 'home', query: {}})
+  router.push({ name: 'home', query: {} })
 }
 </script>

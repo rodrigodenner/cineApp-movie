@@ -58,10 +58,10 @@
 <script setup lang="ts">
 import {ref, onMounted, watch} from 'vue'
 import {useAuthStore} from '@/stores/auth'
-import {getFavoriteMovies} from '@/services/movieService'
 import GenreFilter from '@/components/genre-filter/GenreFilter.vue'
 import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
 import ProfileEditModal from "@/components/auth-modals/profile-edit/ProfileEditModal.vue";
+import {getFavoriteMovies} from "@/services/movies/getFavorites.ts";
 
 
 const authStore = useAuthStore()

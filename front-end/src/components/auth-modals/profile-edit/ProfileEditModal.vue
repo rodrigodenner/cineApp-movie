@@ -104,17 +104,23 @@
     />
   </div>
 </template>
-<script setup lang="ts">
-import {ref} from 'vue'
-import {useRouter} from 'vue-router'
-import {useAuth} from '@/composables/useAuth'
-import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
 
-const emit = defineEmits(['close'])
-const {user, updateUser, deleteUser} = useAuth()
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/auth/useAuth'
+import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
+import type {UpdateUserPayload} from "@/types/AuthPayloads.ts";
+
+
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
+const { user, updateUser, deleteUser } = useAuth()
 const router = useRouter()
 
-const form = ref({
+const form = ref<UpdateUserPayload>({
   name: user.value?.name || '',
   email: user.value?.email || '',
   new_password: '',
@@ -150,14 +156,16 @@ const submit = async () => {
     return
   }
 
-  const payload = {
+  const payload: UpdateUserPayload = {
     name: form.value.name,
     email: form.value.email,
+    password: form.value.new_password || undefined,
     new_password: hasPassword ? form.value.new_password : undefined,
     new_password_confirmation: hasPassword ? form.value.new_password_confirmation : undefined,
   }
 
-  const {success} = await updateUser(payload)
+
+  const { success } = await updateUser(payload)
   isSubmitting.value = false
 
   if (success) emit('close')
@@ -167,12 +175,12 @@ const handleDelete = async () => {
   showConfirmModal.value = false
   isDeleting.value = true
 
-  const {success} = await deleteUser()
+  const { success } = await deleteUser()
   isDeleting.value = false
 
   if (success) {
     emit('close')
-    router.push({name: 'home'})
+    router.push({ name: 'home' })
   }
 }
 </script>

@@ -43,6 +43,7 @@
     </template>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -52,11 +53,11 @@ import MovieSection from '@/components/movie-section/MovieSection.vue'
 import SpinnerLoading from '@/components/spinner-loading/SpinnerLoading.vue'
 import MovieGrid from '@/components/movie-grid/MovieGrid.vue'
 import MovieSearchResult from '@/components/movie-grid/MovieSearchResult.vue'
-import { useNowPlaying } from '@/composables/useNowPlaying'
-import { useTrendingMovies } from '@/composables/useTrendingMovies'
-import { usePopularMovies } from '@/composables/usePopularMovies'
-import { useGenreMovies } from '@/composables/useGenreMovie'
-import { useSearchMovies } from '@/composables/useSearchMovies'
+import { useNowPlaying } from '@/composables/movies/useNowPlaying'
+import { useTrendingMovies } from '@/composables/movies/useTrendingMovies'
+import { usePopularMovies } from '@/composables/movies/usePopularMovies'
+import { useGenreMovies } from '@/composables/movies/useGenreMovie'
+import { useSearchMovies } from '@/composables/movies/useSearchMovies'
 
 const route = useRoute()
 const hasGlobalError = ref(false)
@@ -67,27 +68,12 @@ const handleGlobalError = () => {
 
 const { movies: nowPlaying } = useNowPlaying({ onError: handleGlobalError })
 const { trendingMovies, isTrendingLoading, fetchTrending } = useTrendingMovies({ onError: handleGlobalError })
-const {
-  movies: popularMovies,
-  isLoading: isPopularLoading,
-  fetchPopular
-} = usePopularMovies({ onError: handleGlobalError })
-
-const {
-  selectedGenres,
-  movies: genreMovies,
-  loading: isGenreLoading,
-  fetchMoviesByGenres
-} = useGenreMovies({ onError: handleGlobalError })
-
-const {
-  movies: searchMovies,
-  loading: isSearchLoading,
-  fetchSearchResults
-} = useSearchMovies({ onError: handleGlobalError })
+const { movies: popularMovies, isLoading: isPopularLoading, fetchPopular } = usePopularMovies({ onError: handleGlobalError })
+const { selectedGenres, movies: genreMovies, loading: isGenreLoading, fetchMoviesByGenres } = useGenreMovies({ onError: handleGlobalError })
+const { movies: searchMovies, loading: isSearchLoading, fetchSearchResults } = useSearchMovies({ onError: handleGlobalError })
 
 const isGenreSelected = computed(() => selectedGenres.value.length > 0)
-const searchQuery = computed(() => route.query.q as string || null)
+const searchQuery = computed(() => (route.query.q as string) || null)
 
 const handleGenreSelect = async (genreIds: number[]) => {
   if (genreIds.length === 0) return

@@ -12,22 +12,22 @@
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1 text-white">Nome</label>
-          <input v-model="name" type="text" placeholder="Seu nome"
+          <input v-model="form.name" type="text" placeholder="Seu nome"
                  class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1 text-white">Email</label>
-          <input v-model="email" type="email" placeholder="seu@email.com"
+          <input v-model="form.email" type="email" placeholder="seu@email.com"
                  class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1 text-white">Senha</label>
-          <input v-model="password" type="password" placeholder="******"
+          <input v-model="form.password" type="password" placeholder="******"
                  class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
         </div>
         <div class="mb-6">
           <label class="block text-sm font-medium mb-1 text-white">Confirmar Senha</label>
-          <input v-model="password_confirmation" type="password" placeholder="******"
+          <input v-model="form.password_confirmation" type="password" placeholder="******"
                  class="w-full bg-zinc-800 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
         </div>
         <button
@@ -68,20 +68,28 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useRegister } from '@/composables/useRegister'
+import { useRegister } from '@/composables/auth/useRegister'
+import type { RegisterPayload } from '@/types/AuthPayloads'
 
-const emit = defineEmits(['close', 'switch-to-login'])
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'switch-to-login'): void
+}>()
+
 const router = useRouter()
-
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const password_confirmation = ref('')
 const errorMessage = ref<string | undefined>()
 const isSubmitting = ref(false)
+
+const form = ref<RegisterPayload>({
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+})
 
 const { registerUser } = useRegister()
 
@@ -89,12 +97,7 @@ const handleRegister = async () => {
   errorMessage.value = ''
   isSubmitting.value = true
 
-  const { success, error } = await registerUser(
-      name.value,
-      email.value,
-      password.value,
-      password_confirmation.value
-  )
+  const { success, error } = await registerUser(form.value)
 
   isSubmitting.value = false
 

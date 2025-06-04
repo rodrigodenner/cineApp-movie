@@ -46,9 +46,12 @@
   </div>
 </template>
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   loading?: boolean
 }>()
 
-defineEmits(['cancel', 'confirm'])
+defineEmits<{
+  (e: 'cancel'): void
+  (e: 'confirm'): void
+}>()
 </script>

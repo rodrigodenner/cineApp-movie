@@ -1,5 +1,10 @@
-import {ref} from 'vue'
-import {favoriteMovie, unfavoriteMovie, getFavoriteMovies} from '@/services/movieService'
+import { ref } from 'vue'
+import { unfavoriteMovie } from '@/services/movies/unfavorite'
+import { favoriteMovie } from '@/services/movies/favorite'
+import { getFavoriteMovies } from '@/services/movies/getFavorites'
+import { handleError } from '@/utils/handleError'
+import type {FavoriteMovie} from "@/types/FavoriteMovie.ts";
+
 
 export function useMovieFavorite() {
   const isFavorite = ref(false)
@@ -16,7 +21,7 @@ export function useMovieFavorite() {
         isFavorite.value = true
       }
     } catch (error) {
-      console.error('Erro ao atualizar favoritos', error)
+      handleError(error, 'Erro ao atualizar favoritos')
     } finally {
       isLoading.value = false
     }
@@ -25,10 +30,10 @@ export function useMovieFavorite() {
   const checkIfFavorite = async (tmdbId: number) => {
     try {
       const response = await getFavoriteMovies()
-      const favorites = response.data.data
-      isFavorite.value = favorites.some((fav: any) => fav.tmdb_id === tmdbId)
+      const favorites: FavoriteMovie[] = response.data.data
+      isFavorite.value = favorites.some((fav) => fav.tmdb_id === tmdbId)
     } catch (error) {
-      console.warn('Erro ao verificar favorito', error)
+      handleError(error, 'Erro ao verificar favorito')
       isFavorite.value = false
     }
   }

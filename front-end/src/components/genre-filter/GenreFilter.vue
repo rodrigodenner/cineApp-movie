@@ -31,13 +31,14 @@
     </div>
   </section>
 </template>
+
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
-import {useGenres} from '@/composables/useGenres'
+import { ref, onMounted } from 'vue'
+import { useGenres } from '@/composables/movies/useGenres.ts'
 
 const emit = defineEmits(['select'])
-const selectedGenres = ref<number[]>([0])
-const {genres, loading} = useGenres()
+const selectedGenres = ref<number[]>([])
+const { genres, loading } = useGenres()
 
 const handleSelect = (id: number) => {
   const maxSelection = 3
@@ -63,10 +64,9 @@ const handleSelect = (id: number) => {
   emit('select', [...selectedGenres.value])
 }
 
-
 const clearFilters = () => {
   selectedGenres.value = [0]
-  emit('select', [])
+  emit('select', [0])
 }
 
 onMounted(() => {

@@ -28,9 +28,8 @@
 <script setup lang="ts">
 import {ref, onMounted, computed, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
-import {getMovieDetails} from '@/services/movieService'
-import {useMovieFavorite} from '@/composables/useMovieFavorite'
-import {useRelatedMovies} from '@/composables/useRelatedMovies'
+import {useMovieFavorite} from '@/composables/movies/useMovieFavorite.ts'
+import {useRelatedMovies} from '@/composables/movies/useRelatedMovies.ts'
 import MovieSection from '@/components/movie-section/MovieSection.vue'
 import {useAuthStore} from "@/stores/auth.ts";
 import {useModalStore} from "@/stores/useModalStore.ts";
@@ -38,6 +37,7 @@ import MovieTrailer from "@/components/movie-detail/MovieTrailer.vue";
 import MovieProductionDetails from "@/components/movie-detail/MovieProductionDetails.vue";
 import MovieBanner from "@/components/movie-detail/MovieBanner.vue";
 import MovieHeaderInfo from "@/components/movie-detail/MovieHeaderInfo.vue";
+import {getMovieDetails} from "@/services/movies/getDetails.ts";
 
 
 const route = useRoute()
@@ -65,6 +65,7 @@ const handleFavoriteClick = () => {
 }
 
 onMounted(async () => {
+  console.log('ENTROU NA TELA DE DETALHES')
   const response = await getMovieDetails(Number(route.params.id))
   movie.value = response.data.data
 
